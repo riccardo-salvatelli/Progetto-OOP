@@ -1,111 +1,107 @@
+
 public class Decriptazione {
-	static private double h = 0.01;
-	static private int n = 100000;
-
-	double x[] = new double[n];
-	double y[] = new double[10000];
-	x[0]= 3;
-	y[0]= -2;
-	private double[] autoval1 = new double[n];
-	private double[] autoval2 = new double[n];
-
-	static private double rho = 0.6;
-	static private double w = 5.9;
-	static private double k = 19.5;
-	private double[] t = new double[(int) (n * h)];
-
-	for(int i=1; i<(int)(n*h); i++)
-	{
-		t[i] = t[i - 1] + h;
-	}
-
-	static private double k1x;
-	static private double k2x;
-	static private double k3x;
-	static private double k4x;
-	static private double k1y;
-	static private double k2y;
-	static private double k3y;
-	static private double k4y;
-
-	public double calcoloSequenza() {
+	static double rho = 0.6;
+	static double w = 5.9;
+	static double k = 19.5;
+	public double[][] calcoloSequenza(int dimensione) {
+		double h = 0.01;
+		int n = 100000;
 		
-		this.trovaCaos(dimensione);
+		double[] x = new double[n];
+		double[] y = new double[n];
+		
+		x[0]= 3;
+		y[0]= -2;
+		double[] autoval1 = new double[n];
+		double[] autoval2 = new double[n];
 
-		for (i = 0; i<dimensione; i++){
-			
-			k1x = Decriptazione.f1(this.t[i], this.x[i], this.y[i]);
-			k1y = Decriptazione.f2(this.t[i], this.x[i], this.y[i]);
+		
+		double[] t = new double[(int) (n * h)];
 
-			k2x = Decriptazione.f1(this.t[i] + 0.5 * h, this.x[i] + 0.5 * h * k1x, this.y[i] + 0.5 * h * k1y);
-			k2y = Decriptazione.f2(this.t[i] + 0.5 * h, this.x[i] + 0.5 * h * k1x, this.y[i] + 0.5 * h * k1y);
-
-			k3x = Decriptazione.f1(this.t[i] + 0.5 * h, this.x[i] + 0.5 * h * k2x, this.y[i] + 0.5 * h * k2y);
-			k3y = Decriptazione.f2(this.t[i] + 0.5 * h, this.x[i] + 0.5 * h * k2x, this.y[i] + 0.5 * h * k2y);
-
-			k4x = Decriptazione.f1(this.t[i] + h, this.x[i] + k3x * h, this.y[i] + k3y * h);
-			k4y = Decriptazione.f2(this.t[i] + h, this.x[i] + k3x * h, this.y[i] + k3y * h);
-
-			this.x[i + 1] = this.x[i] + (1 / 6) * (k1x + 2 * k2x + 2 * k3x + k4x) * h;
-			this.y[i + 1] = this.y[i] + (1 / 6) * (k1y + 2 * k2y + 2 * k3y + k4y) * h;
-		}
-		private double[][] stheta = new double[dimensione][2];
-		for(i=0; i<dimensione; i++){
-			
-			stheta[i][1] = Math.floor(Math.pow(this.x[i] - Math.floor(this.x[i]), 150));
-			stheta[i][2] = Math.floor(Math.pow(this.y[i] - Math.floor(this.y[i]), 150));
-		}
-		return stheta;
-	}
-
-	public void trovaCaos(int dim) {
-		private boolean controllo1 = true;
-		private boolean controllo2 = true;
-		for(i = 0; i<n; i++)
+		for(int i=1; i<(int)(n*h); i++)
 		{
-			k1x = Decriptazione.f1(this.t[i], this.x[i], this.y[i]);
-			k1y = Decriptazione.f2(this.t[i], this.x[i], this.y[i]);
+			t[i] = t[i - 1] + h;
+		}
 
-			k2x = Decriptazione.f1(this.t[i] + 0.5 * h, this.x[i] + 0.5 * h * k1x, this.y[i] + 0.5 * h * k1y);
-			k2y = Decriptazione.f2(this.t[i] + 0.5 * h, this.x[i] + 0.5 * h * k1x, this.y[i] + 0.5 * h * k1y);
+		double k1x;
+		double k2x;
+		double k3x;
+		double k4x;
+		double k1y;
+		double k2y;
+		double k3y;
+		double k4y;
+		boolean controllo1 = true;
+		boolean controllo2 = true;
+		
+		for(int i = 0; i<n; i++)
+		{
+			k1x = Decriptazione.f1(t[i], x[i], y[i]);
+			k1y = Decriptazione.f2(t[i], x[i], y[i]);
 
-			k3x = Decriptazione.f1(this.t[i] + 0.5 * h, this.x[i] + 0.5 * h * k2x, this.y[i] + 0.5 * h * k2y);
-			k3y = Decriptazione.f2(this.t[i] + 0.5 * h, this.x[i] + 0.5 * h * k2x, this.y[i] + 0.5 * h * k2y);
+			k2x = Decriptazione.f1(t[i] + 0.5 * h, x[i] + 0.5 * h * k1x, y[i] + 0.5 * h * k1y);
+			k2y = Decriptazione.f2(t[i] + 0.5 * h, x[i] + 0.5 * h * k1x, y[i] + 0.5 * h * k1y);
 
-			k4x = Decriptazione.f1(this.t[i] + h, this.x[i] + k3x * h, this.y[i] + k3y * h);
-			k4y = Decriptazione.f2(this.t[i] + h, this.x[i] + k3x * h, this.y[i] + k3y * h);
+			k3x = Decriptazione.f1(t[i] + 0.5 * h, x[i] + 0.5 * h * k2x, y[i] + 0.5 * h * k2y);
+			k3y = Decriptazione.f2(t[i] + 0.5 * h, x[i] + 0.5 * h * k2x, y[i] + 0.5 * h * k2y);
 
-			this.x[i + 1] = this.x[i] + (1 / 6) * (k1x + 2 * k2x + 2 * k3x + k4x) * h;
-			this.y[i + 1] = this.y[i] + (1 / 6) * (k1y + 2 * k2y + 2 * k3y + k4y) * h;
+			k4x = Decriptazione.f1(t[i] + h, x[i] + k3x * h, y[i] + k3y * h);
+			k4y = Decriptazione.f2(t[i] + h, x[i] + k3x * h, y[i] + k3y * h);
 
-			this.autoval1[i] = rho - 2 * (Math.pow(rho, 2))
-				* (Math.pow(this.x[i], 2) + Math.sqrt(Math.pow(rho - 2 * rho * Math.pow(this.x[i], 2), 2)
-						- (k * Math.sin(w * this.t[i]) - 4 * rho * this.x[i] * this.y[i])));
-			this.autoval2[i] = rho - 2 * (Math.pow(rho, 2))
-				* (Math.pow(this.x[i], 2) - Math.sqrt(Math.pow(rho - 2 * rho * Math.pow(this.x[i], 2), 2)
-						- (k * Math.sin(w * this.t[i]) - 4 * rho * this.x[i] * this.y[i])));
-			if (controllo1 & this.autoval1[i] < 0) {
+			x[i + 1] = x[i] + (1 / 6) * (k1x + 2 * k2x + 2 * k3x + k4x) * h;
+			y[i + 1] = y[i] + (1 / 6) * (k1y + 2 * k2y + 2 * k3y + k4y) * h;
+
+			autoval1[i] = rho - 2 * (Math.pow(rho, 2))
+				* (Math.pow(x[i], 2) + Math.sqrt(Math.pow(rho - 2 * rho * Math.pow(x[i], 2), 2)
+						- (k * Math.sin(w * t[i]) - 4 * rho * x[i] * y[i])));
+			autoval2[i] = rho - 2 * (Math.pow(rho, 2))
+				* (Math.pow(x[i], 2) - Math.sqrt(Math.pow(rho - 2 * rho * Math.pow(x[i], 2), 2)
+						- (k * Math.sin(w * t[i]) - 4 * rho * x[i] * y[i])));
+			if (controllo1 & autoval1[i] < 0) {
 				controllo1 = false;
 			}
-			if (controllo2 & this.autoval2[i] > 0) {
+			if (controllo2 & autoval2[i] > 0) {
 				controllo2 = false;
 			}
 			if (!(controllo1 | controllo2)) {
-				double appoggio = this.x[i];
-				this.x = new double[dim];
-				this.x[0] = appoggio;
-				appoggio = this.y[i];
-				this.y = new double[dim];
-				this.y[0] = appoggio;
-				this.t = new double[dim * h];
-				for (int i = 1; i < (int) (n * h); i++) {
-					this.t[i] = this.t[i - 1] + h;
+				double appoggio = x[i];
+				x = new double[dimensione];
+				x[0] = appoggio;
+				appoggio = y[i];
+				y = new double[dimensione];
+				y[0] = appoggio;
+				t = new double[(int)(dimensione * h)];
+				for (int j = 1; j < (int) (n * h); j++) {
+					t[j] = t[j - 1] + h;
 				}
 				break;
 			}
 		}
-	}
+		for (int i = 0; i < dimensione; i++) {
 
+			k1x = Decriptazione.f1(t[i], x[i], y[i]);
+			k1y = Decriptazione.f2(t[i], x[i], y[i]);
+
+			k2x = Decriptazione.f1(t[i] + 0.5 * h, x[i] + 0.5 * h * k1x, y[i] + 0.5 * h * k1y);
+			k2y = Decriptazione.f2(t[i] + 0.5 * h, x[i] + 0.5 * h * k1x, y[i] + 0.5 * h * k1y);
+
+			k3x = Decriptazione.f1(t[i] + 0.5 * h, x[i] + 0.5 * h * k2x, y[i] + 0.5 * h * k2y);
+			k3y = Decriptazione.f2(t[i] + 0.5 * h, x[i] + 0.5 * h * k2x, y[i] + 0.5 * h * k2y);
+
+			k4x = Decriptazione.f1(t[i] + h, x[i] + k3x * h, y[i] + k3y * h);
+			k4y = Decriptazione.f2(t[i] + h, x[i] + k3x * h, y[i] + k3y * h);
+
+			x[i + 1] = x[i] + (1 / 6) * (k1x + 2 * k2x + 2 * k3x + k4x) * h;
+			y[i + 1] = y[i] + (1 / 6) * (k1y + 2 * k2y + 2 * k3y + k4y) * h;
+		}
+		double[][] stheta = new double[dimensione][2];
+		for (int i = 0; i < dimensione; i++) {
+
+			stheta[i][1] = Math.floor(Math.pow(x[i] - Math.floor(x[i]), 150));
+			stheta[i][2] = Math.floor(Math.pow(y[i] - Math.floor(y[i]), 150));
+		}
+		return stheta;
+	}
 	static public double f1(double t, double x, double y) {
 		return y;
 	}
