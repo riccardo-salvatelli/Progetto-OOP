@@ -5,14 +5,22 @@ public class Decriptazione {
 	static double k = 19.5;
 
 	public int[][] calcoloSequenza(int dimensione, double chiave1, double chiave2) {
+		
+		
 		double h = 0.01;
 		int n = 100000;
 
 		double[] x = new double[n];
 		double[] y = new double[n];
 
-		x[0] = chiave1;
-		y[0] = chiave2;
+		x[0] = -3;
+		y[0] = 2;
+		
+		if(chiave1==x[0] && chiave2==y[0]) {
+			
+		}
+		
+		
 		double[] autoval1 = new double[n];
 		double[] autoval2 = new double[n];
 
