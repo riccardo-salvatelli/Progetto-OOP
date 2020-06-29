@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_WNkKgLoVEeq3qtrne76-Jg" name="NewProgettoOOP_Model">
+  <packagedElement xmi:type="uml:Actor" xmi:id="_1QvHoLoVEeq3qtrne76-Jg" name="Utente Pubblico">
+    <eAnnotations xmi:id="_1QzZELoVEeq3qtrne76-Jg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+      <details xmi:id="_1Q0AILoVEeq3qtrne76-Jg" key="Human"/>
+    </eAnnotations>
+  </packagedElement>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="__RmvoLoVEeq3qtrne76-Jg" name="Scarica File">
+    <extend xmi:id="_Q6_LsLoXEeq3qtrne76-Jg" extendedCase="_Au4wgLoXEeq3qtrne76-Jg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_uDCVYLoWEeq3qtrne76-Jg" name="Inserisci Password">
+    <extend xmi:id="_cK9rILoXEeq3qtrne76-Jg" extendedCase="__RmvoLoVEeq3qtrne76-Jg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_6Iay0LoWEeq3qtrne76-Jg" memberEnd="_6IfrULoWEeq3qtrne76-Jg _6Ig5cLoWEeq3qtrne76-Jg">
+    <ownedEnd xmi:id="_6IfrULoWEeq3qtrne76-Jg" type="_1QvHoLoVEeq3qtrne76-Jg" association="_6Iay0LoWEeq3qtrne76-Jg"/>
+    <ownedEnd xmi:id="_6Ig5cLoWEeq3qtrne76-Jg" type="_uDCVYLoWEeq3qtrne76-Jg" association="_6Iay0LoWEeq3qtrne76-Jg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_6tXS8LoWEeq3qtrne76-Jg" memberEnd="_6tX6ALoWEeq3qtrne76-Jg _6tYhELoWEeq3qtrne76-Jg">
+    <ownedEnd xmi:id="_6tX6ALoWEeq3qtrne76-Jg" type="_1QvHoLoVEeq3qtrne76-Jg" association="_6tXS8LoWEeq3qtrne76-Jg"/>
+    <ownedEnd xmi:id="_6tYhELoWEeq3qtrne76-Jg" type="__RmvoLoVEeq3qtrne76-Jg" association="_6tXS8LoWEeq3qtrne76-Jg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:UseCase" xmi:id="_Au4wgLoXEeq3qtrne76-Jg" name="Visualizza File"/>
+  <packagedElement xmi:type="uml:Association" xmi:id="_HAbAALoXEeq3qtrne76-Jg" memberEnd="_HAbnELoXEeq3qtrne76-Jg _HAc1MLoXEeq3qtrne76-Jg">
+    <ownedEnd xmi:id="_HAbnELoXEeq3qtrne76-Jg" type="_1QvHoLoVEeq3qtrne76-Jg" association="_HAbAALoXEeq3qtrne76-Jg"/>
+    <ownedEnd xmi:id="_HAc1MLoXEeq3qtrne76-Jg" type="_Au4wgLoXEeq3qtrne76-Jg" association="_HAbAALoXEeq3qtrne76-Jg"/>
+  </packagedElement>
+</uml:Model>
