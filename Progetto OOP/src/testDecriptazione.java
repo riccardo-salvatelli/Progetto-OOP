@@ -8,9 +8,9 @@ public class testDecriptazione {
         File a = new File("/home/riccardo/Scaricati/pippo.pdf");
         Decriptazione decripta = new Decriptazione();
 
-        int[] testSequenza = new int[3028];
-        for (int i=0; i<3028;i++){
-            testSequenza[i] = i;
+        int[] testSequenza = new int[(int)a.length()];
+        for (int i=0; i<a.length();i++){
+            testSequenza[i] = i%250;
         }
         BufferedOutputStream e = decripta.chaosXOR(a, testSequenza);
     }

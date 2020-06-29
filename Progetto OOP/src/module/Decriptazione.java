@@ -11,6 +11,14 @@ public class Decriptazione {
 	// risultato di questa operazione in un BufferedOutputStream che restituisce al termine del metodo.
 	public BufferedOutputStream chaosXOR(File file, int[] sequenza){
 		BufferedOutputStream bufferedOutputStream = null;
+
+		//
+		try {
+			bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file.getName()));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
 		BufferedInputStream reader;
 		int i;
 		int unByte;
@@ -19,16 +27,18 @@ public class Decriptazione {
 			reader = new BufferedInputStream(new FileInputStream(file));
 			for(i=0; i<sequenza.length; i++) {
 				unByte = reader.read();				//legge byte per byte del file
+				assert bufferedOutputStream != null;
 				bufferedOutputStream.write(unByte^sequenza[i]); 	//esegue lo xor tra i due valori e lo mette nel bufferedOutputStream
 			}
+			assert bufferedOutputStream != null;
+			bufferedOutputStream.close();
 			reader.close();							//chiude il flusso di input
 
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) { //gestisce l'eccezione di reader.read()
+		} catch (IOException e) { //IOException racchiude le eccezioni sia di FileInputStream che di bufferedOutputStream.write()
 			e.printStackTrace();
 		}
+
 		return bufferedOutputStream;
 	}
 }
