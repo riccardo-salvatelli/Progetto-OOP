@@ -1,6 +1,5 @@
-package module;
-
 import java.io.*;
+import java.io.File;
 
 public class Decriptazione {
 	private int[] chiave = new int[2];
@@ -41,7 +40,7 @@ public class Decriptazione {
 
 		return bufferedOutputStream;
 	}
-}
+
 
 	static double rho = 0.6;
 	static double w = 5.9;
@@ -56,14 +55,9 @@ public class Decriptazione {
 		double[] x = new double[n];
 		double[] y = new double[n];
 
-		x[0] = -3;
-		y[0] = 2;
-		
-		if(chiave1==x[0] && chiave2==y[0]) {
-			
-		}
-		
-		
+		x[0] = chiave1;
+		y[0] = chiave2;
+
 		double[] autoval1 = new double[n];
 		double[] autoval2 = new double[n];
 

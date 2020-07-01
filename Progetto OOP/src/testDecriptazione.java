@@ -1,6 +1,5 @@
 import java.io.BufferedOutputStream;
 import java.io.File;
-import module.Decriptazione;
 
 
 public class testDecriptazione {
