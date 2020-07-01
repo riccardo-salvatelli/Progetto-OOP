@@ -4,9 +4,9 @@ import java.io.*;
 import java.io.File;
 
 public class Decriptazione {
-	
-	private double chiave[] = new double[2];
-	
+
+	private double[] chiave;
+
 	public Decriptazione(double[] chiave) {
 		this.chiave = chiave;
 	}
@@ -19,7 +19,7 @@ public class Decriptazione {
 
 		//
 		try {
-			bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file.getName()));
+			bufferedOutputStream = new BufferedOutputStream(new FileOutputStream("_" + file.getName()));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -52,9 +52,9 @@ public class Decriptazione {
 	static double w = 5.9;
 	static double k = 19.5;
 
-	public int[][] calcoloSequenza(int dimensione) {
-		
-		
+	public int[] calcoloSequenza(int dimensione) {
+
+
 		double h = 0.01;
 		int n = 100000;
 
@@ -141,11 +141,10 @@ public class Decriptazione {
 			x[i + 1] = x[i] + (1.0 / 6.0) * (k1x + 2 * k2x + 2 * k3x + k4x) * h;
 			y[i + 1] = y[i] + (1.0 / 6.0) * (k1y + 2 * k2y + 2 * k3y + k4y) * h;
 		}
-		int[][] stheta = new int[dimensione][2];
+		int[] stheta = new int[dimensione];
 		for (int i = 0; i < dimensione; i++) {
 
-			stheta[i][0] = ((int) Math.floor(Math.pow(10, 9) * (x[i] - Math.floor(x[i])))) % 255;
-			stheta[i][1] = ((int) Math.floor(Math.pow(10, 9) * (y[i] - Math.floor(y[i])))) % 255;
+			stheta[i] = ((int) Math.floor(Math.pow(10, 9) * (x[i] - Math.floor(x[i])))) % 255;
 		}
 		return stheta;
 	}
