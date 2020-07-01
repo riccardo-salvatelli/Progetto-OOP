@@ -1,3 +1,0 @@
-INDEX VERSION 1.131+C:\Users\Alessandro\Desktop\Programmazione ad oggetti\Progetto-OOP\Progetto OOP\.metadata\.plugins\org.eclipse.jdt.core
-1671692264.index
-3525073143.index

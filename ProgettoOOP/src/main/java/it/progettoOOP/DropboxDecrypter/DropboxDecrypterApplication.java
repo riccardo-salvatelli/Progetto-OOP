@@ -1,0 +1,13 @@
+package it.progettoOOP.DropboxDecrypter;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DropboxDecrypterApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(DropboxDecrypterApplication.class, args);
+	}
+
+}
