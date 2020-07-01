@@ -1,0 +1,120 @@
+Index: src/module/Decriptazione.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package module;\n\nimport java.io.*;\n\npublic class Decriptazione {\n\tprivate int[] chiave = new int[2];\n\tprivate String url;\n\n\t//Questa funzione prende in input un file (file) e un array di valori interi (sequenza). legge il file byte per\n\t// byte e per ognuno di essi ne esegue lo xor rispetto al corrispondente i-esimo valore della sequenza. Salva il\n\t// risultato di questa operazione in un BufferedOutputStream che restituisce al termine del metodo.\n\tpublic BufferedOutputStream chaosXOR(File file, int[] sequenza){\n\t\tBufferedOutputStream bufferedOutputStream = null;\n\n\t\t//\n\t\ttry {\n\t\t\tbufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file.getName()));\n\t\t} catch (FileNotFoundException e) {\n\t\t\te.printStackTrace();\n\t\t}\n\n\t\tBufferedInputStream reader;\n\t\tint i;\n\t\tint unByte;\n\n\t\ttry {\n\t\t\treader = new BufferedInputStream(new FileInputStream(file));\n\t\t\tfor(i=0; i<sequenza.length; i++) {\n\t\t\t\tunByte = reader.read();\t\t\t\t//legge byte per byte del file\n\t\t\t\tassert bufferedOutputStream != null;\n\t\t\t\tbufferedOutputStream.write(unByte^sequenza[i]); \t//esegue lo xor tra i due valori e lo mette nel bufferedOutputStream\n\t\t\t}\n\t\t\tassert bufferedOutputStream != null;\n\t\t\tbufferedOutputStream.close();\n\t\t\treader.close();\t\t\t\t\t\t\t//chiude il flusso di input\n\n\n\t\t} catch (IOException e) { //IOException racchiude le eccezioni sia di FileInputStream che di bufferedOutputStream.write()\n\t\t\te.printStackTrace();\n\t\t}\n\n\t\treturn bufferedOutputStream;\n\t}\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/module/Decriptazione.java	(revision 40f82303d665205b8a84a5963b3e9b6561f672ed)
++++ src/module/Decriptazione.java	(date 1593417988146)
+@@ -27,10 +27,10 @@
+ 			reader = new BufferedInputStream(new FileInputStream(file));
+ 			for(i=0; i<sequenza.length; i++) {
+ 				unByte = reader.read();				//legge byte per byte del file
+-				assert bufferedOutputStream != null;
++				if (bufferedOutputStream == null) throw new AssertionError(); //controllo che il buffer non sia nullo per gestire tutte le eccezioni
+ 				bufferedOutputStream.write(unByte^sequenza[i]); 	//esegue lo xor tra i due valori e lo mette nel bufferedOutputStream
+ 			}
+-			assert bufferedOutputStream != null;
++			if (bufferedOutputStream == null) throw new AssertionError();
+ 			bufferedOutputStream.close();
+ 			reader.close();							//chiude il flusso di input
+ 
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"BranchesTreeState\">\n    <expand>\n      <path>\n        <item name=\"ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"LOCAL_ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n      </path>\n      <path>\n        <item name=\"ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"REMOTE_ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n      </path>\n      <path>\n        <item name=\"ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"REMOTE_ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"GROUP_NODE:origin\" type=\"e8cecc67:BranchNodeDescriptor\" />\n      </path>\n    </expand>\n    <select>\n      <path>\n        <item name=\"ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"REMOTE_ROOT\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"GROUP_NODE:origin\" type=\"e8cecc67:BranchNodeDescriptor\" />\n        <item name=\"BRANCH:origin/master\" type=\"e8cecc67:BranchNodeDescriptor\" />\n      </path>\n    </select>\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"fd097c31-102c-4006-bb42-9e54c6104a8b\" name=\"Default Changelist\" comment=\"\">\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Prova.java\" beforeDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/module/Decriptazione.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/module/Decriptazione.java\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/testDecriptazione.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/testDecriptazione.java\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"Class\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\n      <map>\n        <entry key=\"$PROJECT_DIR$/..\" value=\"master\" />\n      </map>\n    </option>\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$/..\" />\n  </component>\n  <component name=\"ProjectId\" id=\"1dqkOyIcx5g5m96uzt64LgPWf2C\" />\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">\n    <property name=\"ASKED_ADD_EXTERNAL_FILES\" value=\"true\" />\n    <property name=\"Downloaded.Files.Path.Enabled\" value=\"false\" />\n    <property name=\"Repository.Attach.Annotations\" value=\"false\" />\n    <property name=\"Repository.Attach.JavaDocs\" value=\"false\" />\n    <property name=\"Repository.Attach.Sources\" value=\"false\" />\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\n    <property name=\"SHARE_PROJECT_CONFIGURATION_FILES\" value=\"true\" />\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$\" />\n    <property name=\"project.structure.last.edited\" value=\"SDKs\" />\n    <property name=\"project.structure.proportion\" value=\"0.0\" />\n    <property name=\"project.structure.side.proportion\" value=\"0.2\" />\n  </component>\n  <component name=\"RunManager\">\n    <configuration name=\"testDecriptazione\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\n      <option name=\"MAIN_CLASS_NAME\" value=\"testDecriptazione\" />\n      <module name=\"Progetto OOP\" />\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"Application.testDecriptazione\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SvnConfiguration\">\n    <configuration />\n  </component>\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"fd097c31-102c-4006-bb42-9e54c6104a8b\" name=\"Default Changelist\" comment=\"\" />\n      <created>1593159983437</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1593159983437</updated>\n    </task>\n    <servers />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State>\n              <option name=\"FILTERS\">\n                <map>\n                  <entry key=\"branch\">\n                    <value>\n                      <list>\n                        <option value=\"origin/master\" />\n                      </list>\n                    </value>\n                  </entry>\n                </map>\n              </option>\n            </State>\n          </value>\n        </entry>\n      </map>\n    </option>\n    <option name=\"oldMeFiltersMigrated\" value=\"true\" />\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"corretto bufferedOutputStream in chaosXOR()\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"corretto bufferedOutputStream in chaosXOR()\" />\n  </component>\n  <component name=\"WindowStateProjectService\">\n    <state x=\"690\" y=\"241\" width=\"530\" height=\"584\" key=\"ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1\" timestamp=\"1593360596392\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state x=\"690\" y=\"241\" width=\"530\" height=\"584\" key=\"ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593360596392\" />\n    <state x=\"904\" y=\"302\" width=\"424\" height=\"491\" key=\"FileChooserDialogImpl\" timestamp=\"1593160927576\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state x=\"904\" y=\"302\" width=\"424\" height=\"491\" key=\"FileChooserDialogImpl/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593160927576\" />\n    <state width=\"1874\" height=\"269\" key=\"GridCell.Tab.0.bottom\" timestamp=\"1593417670620\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state width=\"1874\" height=\"269\" key=\"GridCell.Tab.0.bottom/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593417670620\" />\n    <state width=\"1874\" height=\"269\" key=\"GridCell.Tab.0.center\" timestamp=\"1593417670620\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state width=\"1874\" height=\"269\" key=\"GridCell.Tab.0.center/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593417670620\" />\n    <state width=\"1874\" height=\"269\" key=\"GridCell.Tab.0.left\" timestamp=\"1593417670619\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state width=\"1874\" height=\"269\" key=\"GridCell.Tab.0.left/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593417670619\" />\n    <state width=\"1874\" height=\"269\" key=\"GridCell.Tab.0.right\" timestamp=\"1593417670620\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state width=\"1874\" height=\"269\" key=\"GridCell.Tab.0.right/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593417670620\" />\n    <state width=\"1874\" height=\"332\" key=\"GridCell.Tab.1.bottom\" timestamp=\"1593415054935\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state width=\"1874\" height=\"332\" key=\"GridCell.Tab.1.bottom/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593415054935\" />\n    <state width=\"1874\" height=\"332\" key=\"GridCell.Tab.1.center\" timestamp=\"1593415054934\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state width=\"1874\" height=\"332\" key=\"GridCell.Tab.1.center/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593415054934\" />\n    <state width=\"1874\" height=\"332\" key=\"GridCell.Tab.1.left\" timestamp=\"1593415054934\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state width=\"1874\" height=\"332\" key=\"GridCell.Tab.1.left/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593415054934\" />\n    <state width=\"1874\" height=\"332\" key=\"GridCell.Tab.1.right\" timestamp=\"1593415054934\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state width=\"1874\" height=\"332\" key=\"GridCell.Tab.1.right/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593415054934\" />\n    <state x=\"830\" y=\"95\" width=\"1024\" height=\"852\" key=\"SettingsEditor\" timestamp=\"1593161594540\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state x=\"830\" y=\"95\" width=\"1024\" height=\"852\" key=\"SettingsEditor/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593161594540\" />\n    <state x=\"1014\" y=\"414\" width=\"646\" height=\"220\" key=\"com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD\" timestamp=\"1593161576518\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state x=\"1014\" y=\"414\" width=\"646\" height=\"220\" key=\"com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593161576518\" />\n    <state x=\"624\" y=\"240\" key=\"run.anything.popup\" timestamp=\"1593416779333\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state x=\"624\" y=\"240\" key=\"run.anything.popup/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593416779333\" />\n    <state x=\"623\" y=\"247\" width=\"672\" height=\"678\" key=\"search.everywhere.popup\" timestamp=\"1593416667524\">\n      <screen x=\"0\" y=\"27\" width=\"1920\" height=\"1005\" />\n    </state>\n    <state x=\"623\" y=\"247\" width=\"672\" height=\"678\" key=\"search.everywhere.popup/0.27.1920.1005@0.27.1920.1005\" timestamp=\"1593416667524\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/workspace.xml	(revision 40f82303d665205b8a84a5963b3e9b6561f672ed)
++++ .idea/workspace.xml	(date 1593417988586)
+@@ -27,10 +27,7 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="fd097c31-102c-4006-bb42-9e54c6104a8b" name="Default Changelist" comment="">
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Prova.java" beforeDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/module/Decriptazione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/module/Decriptazione.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/testDecriptazione.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/testDecriptazione.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -97,6 +94,14 @@
+       <option name="presentableId" value="Default" />
+       <updated>1593159983437</updated>
+     </task>
++    <task id="LOCAL-00001" summary="corretto bufferedOutputStream in chaosXOR()">
++      <created>1593417800249</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1593417800249</updated>
++    </task>
++    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
+   <component name="Vcs.Log.Tabs.Properties">
+@@ -136,42 +141,46 @@
+       <screen x="0" y="27" width="1920" height="1005" />
+     </state>
+     <state x="904" y="302" width="424" height="491" key="FileChooserDialogImpl/0.27.1920.1005@0.27.1920.1005" timestamp="1593160927576" />
+-    <state width="1874" height="269" key="GridCell.Tab.0.bottom" timestamp="1593417670620">
++    <state width="1874" height="269" key="GridCell.Tab.0.bottom" timestamp="1593417928633">
+       <screen x="0" y="27" width="1920" height="1005" />
+     </state>
+-    <state width="1874" height="269" key="GridCell.Tab.0.bottom/0.27.1920.1005@0.27.1920.1005" timestamp="1593417670620" />
+-    <state width="1874" height="269" key="GridCell.Tab.0.center" timestamp="1593417670620">
++    <state width="1874" height="269" key="GridCell.Tab.0.bottom/0.27.1920.1005@0.27.1920.1005" timestamp="1593417928633" />
++    <state width="1874" height="269" key="GridCell.Tab.0.center" timestamp="1593417928631">
+       <screen x="0" y="27" width="1920" height="1005" />
+     </state>
+-    <state width="1874" height="269" key="GridCell.Tab.0.center/0.27.1920.1005@0.27.1920.1005" timestamp="1593417670620" />
+-    <state width="1874" height="269" key="GridCell.Tab.0.left" timestamp="1593417670619">
++    <state width="1874" height="269" key="GridCell.Tab.0.center/0.27.1920.1005@0.27.1920.1005" timestamp="1593417928631" />
++    <state width="1874" height="269" key="GridCell.Tab.0.left" timestamp="1593417928631">
+       <screen x="0" y="27" width="1920" height="1005" />
+     </state>
+-    <state width="1874" height="269" key="GridCell.Tab.0.left/0.27.1920.1005@0.27.1920.1005" timestamp="1593417670619" />
+-    <state width="1874" height="269" key="GridCell.Tab.0.right" timestamp="1593417670620">
++    <state width="1874" height="269" key="GridCell.Tab.0.left/0.27.1920.1005@0.27.1920.1005" timestamp="1593417928631" />
++    <state width="1874" height="269" key="GridCell.Tab.0.right" timestamp="1593417928631">
+       <screen x="0" y="27" width="1920" height="1005" />
+     </state>
+-    <state width="1874" height="269" key="GridCell.Tab.0.right/0.27.1920.1005@0.27.1920.1005" timestamp="1593417670620" />
+-    <state width="1874" height="332" key="GridCell.Tab.1.bottom" timestamp="1593415054935">
++    <state width="1874" height="269" key="GridCell.Tab.0.right/0.27.1920.1005@0.27.1920.1005" timestamp="1593417928631" />
++    <state width="1874" height="332" key="GridCell.Tab.1.bottom" timestamp="1593417748424">
+       <screen x="0" y="27" width="1920" height="1005" />
+     </state>
+-    <state width="1874" height="332" key="GridCell.Tab.1.bottom/0.27.1920.1005@0.27.1920.1005" timestamp="1593415054935" />
+-    <state width="1874" height="332" key="GridCell.Tab.1.center" timestamp="1593415054934">
++    <state width="1874" height="332" key="GridCell.Tab.1.bottom/0.27.1920.1005@0.27.1920.1005" timestamp="1593417748424" />
++    <state width="1874" height="332" key="GridCell.Tab.1.center" timestamp="1593417748424">
+       <screen x="0" y="27" width="1920" height="1005" />
+     </state>
+-    <state width="1874" height="332" key="GridCell.Tab.1.center/0.27.1920.1005@0.27.1920.1005" timestamp="1593415054934" />
+-    <state width="1874" height="332" key="GridCell.Tab.1.left" timestamp="1593415054934">
++    <state width="1874" height="332" key="GridCell.Tab.1.center/0.27.1920.1005@0.27.1920.1005" timestamp="1593417748424" />
++    <state width="1874" height="332" key="GridCell.Tab.1.left" timestamp="1593417748424">
+       <screen x="0" y="27" width="1920" height="1005" />
+     </state>
+-    <state width="1874" height="332" key="GridCell.Tab.1.left/0.27.1920.1005@0.27.1920.1005" timestamp="1593415054934" />
+-    <state width="1874" height="332" key="GridCell.Tab.1.right" timestamp="1593415054934">
++    <state width="1874" height="332" key="GridCell.Tab.1.left/0.27.1920.1005@0.27.1920.1005" timestamp="1593417748424" />
++    <state width="1874" height="332" key="GridCell.Tab.1.right" timestamp="1593417748424">
+       <screen x="0" y="27" width="1920" height="1005" />
+     </state>
+-    <state width="1874" height="332" key="GridCell.Tab.1.right/0.27.1920.1005@0.27.1920.1005" timestamp="1593415054934" />
++    <state width="1874" height="332" key="GridCell.Tab.1.right/0.27.1920.1005@0.27.1920.1005" timestamp="1593417748424" />
+     <state x="830" y="95" width="1024" height="852" key="SettingsEditor" timestamp="1593161594540">
+       <screen x="0" y="27" width="1920" height="1005" />
+     </state>
+     <state x="830" y="95" width="1024" height="852" key="SettingsEditor/0.27.1920.1005@0.27.1920.1005" timestamp="1593161594540" />
++    <state x="555" y="265" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1593417822491">
++      <screen x="0" y="27" width="1920" height="1005" />
++    </state>
++    <state x="555" y="265" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.1920.1005@0.27.1920.1005" timestamp="1593417822491" />
+     <state x="1014" y="414" width="646" height="220" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1593161576518">
+       <screen x="0" y="27" width="1920" height="1005" />
+     </state>
