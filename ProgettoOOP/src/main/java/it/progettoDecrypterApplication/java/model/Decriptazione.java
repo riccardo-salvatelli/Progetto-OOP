@@ -4,8 +4,12 @@ import java.io.*;
 import java.io.File;
 
 public class Decriptazione {
-	private int[] chiave = new int[2];
-	private String url;
+	
+	private double chiave[] = new double[2];
+	
+	public Decriptazione(double[] chiave) {
+		this.chiave = chiave;
+	}
 
 	//Questa funzione prende in input un file (file) e un array di valori interi (sequenza). legge il file byte per
 	// byte e per ognuno di essi ne esegue lo xor rispetto al corrispondente i-esimo valore della sequenza. Salva il
@@ -48,7 +52,7 @@ public class Decriptazione {
 	static double w = 5.9;
 	static double k = 19.5;
 
-	public int[][] calcoloSequenza(int dimensione, double chiave1, double chiave2) {
+	public int[][] calcoloSequenza(int dimensione) {
 		
 		
 		double h = 0.01;
@@ -57,8 +61,8 @@ public class Decriptazione {
 		double[] x = new double[n];
 		double[] y = new double[n];
 
-		x[0] = chiave1;
-		y[0] = chiave2;
+		x[0] = chiave[0];
+		y[0] = chiave[1];
 
 		double[] autoval1 = new double[n];
 		double[] autoval2 = new double[n];
