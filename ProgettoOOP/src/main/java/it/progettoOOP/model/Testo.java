@@ -1,6 +1,6 @@
-package it.progettoDecrypterApplication.java.model;
+package it.progettoOOP.model;
 
-import it.progettoOOP.DropboxDecrypter.exception.NumCaratteriException;
+import it.progettoOOP.exception.NumCaratteriException;
 
 public class Testo extends File {
 

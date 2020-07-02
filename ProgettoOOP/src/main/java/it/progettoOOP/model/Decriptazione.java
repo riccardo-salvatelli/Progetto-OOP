@@ -1,4 +1,4 @@
-package it.progettoDecrypterApplication.java.model;
+package it.progettoOOP.model;
 
 import java.io.*;
 import java.io.File;

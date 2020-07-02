@@ -1,4 +1,4 @@
-package it.progettoDecrypterApplication.java.model;
+package it.progettoOOP.model;
 
 import java.util.Date;
 
@@ -23,7 +23,9 @@ public class File {
 		this.dataUltimaModifica = null;
 	}
 
-
+	public File(String nome) {
+		this.nome = nome;
+	}
 	public File(String nome, String percorso, int id, int dimensione, String autore, Date dataCreazione,
 			Date dataUltimaModifica) {
 		this.nome = nome;

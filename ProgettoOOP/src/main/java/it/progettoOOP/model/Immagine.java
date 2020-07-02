@@ -1,6 +1,6 @@
-package it.progettoDecrypterApplication.java.model;
+package it.progettoOOP.model;
 
-import it.progettoOOP.DropboxDecrypter.exception.NumPixelException;
+import it.progettoOOP.exception.NumPixelException;
 
 public class Immagine extends File {
 

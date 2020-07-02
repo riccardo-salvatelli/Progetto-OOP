@@ -1,4 +1,4 @@
-package it.progettoOOP.DropboxDecrypter.exception;
+package it.progettoOOP.exception;
 
 public class NumCaratteriException extends Exception {
 
