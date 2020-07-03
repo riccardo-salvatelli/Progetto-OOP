@@ -11,6 +11,7 @@ import it.progettoOOP.controller.DropboxDecrypterController;
 public class DropboxDecrypterApplication {
 
 	public static void main(String[] args) {
+		
 		SpringApplication.run(DropboxDecrypterApplication.class, args);
 		}
 		

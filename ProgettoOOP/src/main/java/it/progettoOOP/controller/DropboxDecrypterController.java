@@ -20,9 +20,16 @@ public class DropboxDecrypterController {
 	public File esempio() {
 		return new File();
 	}
-	@PostMapping("/esempio")
-	public File exampleMethod2(@RequestBody String body) {
-		return new File("ciao");
 	
+	@GetMapping("/scarica") 
+	public void scarica() {
+		//metodo che prende i file da dropbox e li scarica in locale
+		System.out.println("Ho scaricato i file criptati");
+	}
+	@GetMapping("/decripta")
+	public void decripta() {
+		//qui c'è un metodo che passa i file scaricati a decriptazione
+		System.out.println("Ho decriptato i file");
 	}
 }
+	
