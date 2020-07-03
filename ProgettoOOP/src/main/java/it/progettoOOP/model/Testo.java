@@ -1,5 +1,6 @@
 package it.progettoOOP.model;
-
+import java.io.*;
+import java.util.*;
 import it.progettoOOP.exception.NumCaratteriException;
 
 public class Testo extends File {
@@ -8,19 +9,18 @@ public class Testo extends File {
 	private int numParole;
 	private int numFrasi;
 
-	public Testo(int numCaratteri, int numParole, int numFrasi) {
-		super();
-		this.numCaratteri = numCaratteri;
-		this.numParole = numParole;
+	public Testo(String nome, String percorso, int id, int dimensione, String autore, Date dataCreazione,
+			Date dataUltimaModifica) {
+		super(nome, percorso, id, dimensione,autore, dataCreazione,
+				 dataUltimaModifica);
+		this.numFrasi = this.conteggioNumeroFrasi();
+		this.numParole = this.conteggioNumeroParole();
+		this.numCaratteri = this.conteggioNumeroCaratteri();
+	}
+
+	public void setNumFrasi(int numFrasi) {
 		this.numFrasi = numFrasi;
-		// TODO Auto-generated constructor stub
 	}
-
-	public Testo() {
-		super();
-		this.numCaratteri = -1;
-	}
-
 	public int getNumCaratteri() throws NumCaratteriException {
 		if (numCaratteri >= 0)
 			return numCaratteri;
@@ -38,14 +38,74 @@ public class Testo extends File {
 
 	public void setNumParole(int numParole) {
 		this.numParole = numParole;
+	} 
+
+	public int getNumFrasi() {	
+		 return this.numFrasi;
 	}
 
-	public int getNumFrasi() {
-		return numFrasi;
+	
+	public int conteggioNumeroFrasi () {
+		int i = 0;
+		 try {
+		      BufferedReader reader = new BufferedReader(new FileReader(this.getPercorso()));
+		      int next = reader.read();
+		      if(next !=-1) {
+		        do {
+		          if ((char)next == '.') i++;		//conto quanti punti incontro così da sapere le frasi
+		          next = reader.read();
+		        }while(next != -1);
+		      reader.close();
+		      }
+		      return i;
+		    }
+		    catch(IOException e) {
+		      System.out.println("C'è stato un ERRORE!");
+		      System.out.println(e);
+		      return -1;
+		    }
+	  }
+	
+	public int conteggioNumeroParole() {
+		int i = 0;
+		 try {
+		      BufferedReader reader = new BufferedReader(new FileReader(this.getPercorso()));
+		      int next = reader.read();
+		      if(next !=-1) {
+		        do {
+		          if ((char)next == ' ') i++;		//conto quanti spazi incontro così da sapere le frasi
+		          next = reader.read();
+		        }while(next != -1);
+		      reader.close();
+		      }										
+		      return i;
+		    }
+		    catch(IOException e) {
+		      System.out.println("C'è stato un ERRORE!");
+		      System.out.println(e);			// se entra nel catch c'è stato un errore quindi il programma abortisce
+		      return -1;
+		    }	
 	}
-
-	public void setNumFrasi(int numFrasi) {
-		this.numFrasi = numFrasi;
+	
+	public int conteggioNumeroCaratteri() {
+		int i = 0;
+		 try {
+		      BufferedReader reader = new BufferedReader(new FileReader(this.getPercorso()));
+		      int next = reader.read();
+		      if(next !=-1) {
+		        do {		//conto quanti spazi incontro così da sapere le frasi
+		          next = reader.read();
+		          i++;
+		        }while(next != -1);
+		      reader.close();
+		      }										
+		      return i;
+		    }
+		    catch(IOException e) {
+		      System.out.println("C'è stato un ERRORE!");
+		      System.out.println(e);			// se entra nel catch c'è stato un errore quindi il programma abortisce
+		      return -1;
+		    }	
 	}
-
 }
+
