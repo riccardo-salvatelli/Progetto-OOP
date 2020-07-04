@@ -73,7 +73,7 @@ public class Testo extends File {
 		      int next = reader.read();
 		      if(next !=-1) {
 		        do {
-		          if ((char)next == ' ') i++;		//conto quanti spazi incontro così da sapere le frasi
+		          if ((char)next == ' ') i++;		//conto quanti spazi incontro così da sapere le parole
 		          next = reader.read();
 		        }while(next != -1);
 		      reader.close();
@@ -82,7 +82,7 @@ public class Testo extends File {
 		    }
 		    catch(IOException e) {
 		      System.out.println("C'è stato un ERRORE!");
-		      System.out.println(e);			// se entra nel catch c'è stato un errore quindi il programma abortisce
+		      System.out.println(e);			// se entra nel catch c'è stato un errore
 		      return -1;
 		    }	
 	}
@@ -93,7 +93,7 @@ public class Testo extends File {
 		      BufferedReader reader = new BufferedReader(new FileReader(this.getPercorso()));
 		      int next = reader.read();
 		      if(next !=-1) {
-		        do {		//conto quanti spazi incontro così da sapere le frasi
+		        do {		//conto quanti spazi incontro così da sapere i caratteri
 		          next = reader.read();
 		          i++;
 		        }while(next != -1);
@@ -103,7 +103,7 @@ public class Testo extends File {
 		    }
 		    catch(IOException e) {
 		      System.out.println("C'è stato un ERRORE!");
-		      System.out.println(e);			// se entra nel catch c'è stato un errore quindi il programma abortisce
+		      System.out.println(e);			// se entra nel catch c'è stato un errore 
 		      return -1;
 		    }	
 	}
