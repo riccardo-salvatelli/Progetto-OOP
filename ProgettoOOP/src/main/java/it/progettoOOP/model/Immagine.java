@@ -14,7 +14,7 @@ public class Immagine extends it.progettoOOP.model.File {
 
 	public Immagine(String nome,
 					String percorso,
-					int id,
+					String id,
 					int dimensione,
 					String autore,
 					Date dataCreazione,

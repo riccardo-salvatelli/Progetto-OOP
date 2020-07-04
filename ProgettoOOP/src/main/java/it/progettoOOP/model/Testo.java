@@ -9,7 +9,7 @@ public class Testo extends File {
 	private int numParole;
 	private int numFrasi;
 
-	public Testo(String nome, String percorso, int id, int dimensione, String autore, Date dataCreazione,
+	public Testo(String nome, String percorso, String id, int dimensione, String autore, Date dataCreazione,
 			Date dataUltimaModifica) {
 		super(nome, percorso, id, dimensione,autore, dataCreazione,
 				 dataUltimaModifica);

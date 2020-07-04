@@ -6,7 +6,7 @@ public class File {
 
 	private String nome;
 	private String percorso;
-	private int id;
+	private String id;
 	private int dimensione;
 	private String autore;
 	private Date dataCreazione;
@@ -16,7 +16,7 @@ public class File {
 	public File() {
 		this.nome = null;
 		this.percorso = null;
-		this.id = -1;
+		this.id = null;
 		this.dimensione = -1;
 		this.autore = null;
 		this.dataCreazione = null;
@@ -26,7 +26,7 @@ public class File {
 	public File(String nome) {
 		this.nome = nome;
 	}
-	public File(String nome, String percorso, int id, int dimensione, String autore, Date dataCreazione,
+	public File(String nome, String percorso, String id, int dimensione, String autore, Date dataCreazione,
 			Date dataUltimaModifica) {
 		this.nome = nome;
 		this.percorso = percorso;
@@ -58,12 +58,12 @@ public class File {
 	}
 
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -107,5 +107,13 @@ public class File {
 		this.dataUltimaModifica = dataUltimaModifica;
 	}
 
+	
+	public void scaricaFile(String id) {
+		
+		
+		
+		
+		
+	}
 }
 	
