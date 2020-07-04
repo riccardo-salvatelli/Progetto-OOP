@@ -49,7 +49,7 @@ public class ServizioFileImpl implements ServizioFile {
 	// nella cartella principale. Ritorna due array string contenenti id e rispettivo nome file.
 	public String[][] getListaFile(){
 		JSONObject obj;
-		String token = "Cxab77MLmfQAAAAAAAAA7G6NSiHlqSFE77z5AGgtFgBcRgsdp3eAxCrfe7yfULMV";
+		String token = "token";
 		String url = "https://api.dropboxapi.com/2/files/list_folder";
 		HttpHeaders headers = new HttpHeaders();
 
