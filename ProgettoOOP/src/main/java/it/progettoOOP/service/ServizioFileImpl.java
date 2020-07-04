@@ -11,13 +11,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.http.HttpStatus;
 
+
+@Service
 public class ServizioFileImpl implements ServizioFile {
 	private static Map <String,File> fileRepo = new HashMap <>(); // l'indicie è di tipo String e non int perchè usiamo l'id del file che
 																// di tipo string
-
-	public ServizioFileImpl() {
-		// TODO Auto-generated constructor stub
-	}
 
 	public void aggiungiFile(File file) {
 		if(fileRepo.containsKey(file.getId())) {
@@ -25,13 +23,13 @@ public class ServizioFileImpl implements ServizioFile {
 		} 
 		fileRepo.put(file.getId(), file); 	//aggiungo un file all'hashmap 
 	}
-	
+
 	public boolean cancellaFile(String id) {
 		// se non rimuove il file, ritorna false perchè non lo ha trovato
 		// se lo ha trovato lo rimuove e ritorna true
 		return fileRepo.remove(id) != null;
 	}
-	
+
 	public boolean aggiornaFile(String id,File file) {
 		if(!cancellaFile(id)) return false;			// vede se il file è stato cancellato; se si va avanti e aggiorna il file
 		file.setId(id);										// se non lo ha cancellato termina
@@ -47,9 +45,9 @@ public class ServizioFileImpl implements ServizioFile {
 
 	//questo metodo esegue una request list_folder ottenendo l'elenco di tutti i file contenuti
 	// nella cartella principale. Ritorna due array string contenenti id e rispettivo nome file.
-	public String[][] getListaFile(){
+	public String[] getListaFile(){
 		JSONObject obj;
-		String token = "Cxab77MLmfQAAAAAAAAA7G6NSiHlqSFE77z5AGgtFgBcRgsdp3eAxCrfe7yfULMV";
+		String token = "token";
 		String url = "https://api.dropboxapi.com/2/files/list_folder";
 		HttpHeaders headers = new HttpHeaders();
 
@@ -64,12 +62,10 @@ public class ServizioFileImpl implements ServizioFile {
 		obj = new JSONObject(restTemplate.postForObject(url, entity, String.class)); //dal response della request definisco l'obj (json)
 		JSONArray array = obj.getJSONArray("entries");
 		String[] idsArray = new String[array.length()];
-		String[] nameArray = new String[array.length()];
 		for(int i = 0; i < array.length(); i++){
-			idsArray[i] = array.getJSONObject(i).getString("id");
-			nameArray[i] = array.getJSONObject(i).getString("name");
+			idsArray[i] = array.getJSONObject(i).getString("name") + " ---> " + array.getJSONObject(i).getString("id");
 		}
-		return new String[][] {idsArray, nameArray};
+		return idsArray;
 	}
 	
 	
