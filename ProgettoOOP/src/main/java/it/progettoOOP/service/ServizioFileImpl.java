@@ -1,15 +1,17 @@
 package it.progettoOOP.service;
 import it.progettoOOP.model.*;
+
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.util.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
-
-import org.springframework.http.HttpStatus;
 
 
 @Service
@@ -67,9 +69,72 @@ public class ServizioFileImpl implements ServizioFile {
 		}
 		return idsArray;
 	}
-	
-	
-	
+
+
+	//Con questo metodo, a partire dall'id del file, si ricavano tutti gli attributi di esso.
+	//Viene prima fatta una request di tipo get_metadata, e poi list_file_members per ottenere
+	//l'utente proprietario del file. Ritorna un oggetto di tipo File completo di tutti gli attributi
+	//ricavati.
+	public File getInformazioniFile(String id){
+		JSONObject obj;
+		String token = "TOKEN";
+		String url = "https://api.dropboxapi.com/2/files/get_metadata";
+		String nomeFile;
+		String autoreFile;
+		int dimensioneFile;
+		Date dataModifica;
+		String jsonString = "{\"path\": \""+ id +"\"}";
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.set("Content-Type", "application/json");
+		headers.set("Authorization", "Bearer " + token);
+		HttpEntity<String> entity = new HttpEntity<>(jsonString, headers); //genera qualcosa del tipo {requestJson}[headers]
+
+		RestTemplate restTemplate = new RestTemplate();
+		obj = new JSONObject(restTemplate.postForObject(url, entity, String.class)); //dal response della request definisco l'obj (json)
+		nomeFile = obj.getString("name");
+		dimensioneFile = obj.getInt("size");
+		String appoggioData = obj.getString("client_modified");
+		dataModifica = new Date(Integer.parseInt(appoggioData.split("-")[0]), Integer.parseInt(appoggioData.split("-")[1]),Integer.parseInt(appoggioData.split("-")[2].split("T")[0]));
+
+		url = "https://api.dropboxapi.com/2/sharing/list_file_members";
+		jsonString = "{\"file\": \"" + id + "\"}";
+		entity = new HttpEntity<>(jsonString, headers);
+		obj = new JSONObject(restTemplate.postForObject(url,entity,String.class));
+		JSONArray usersArray = obj.getJSONArray("users");
+		int indice = 0;
+		for(int i = 0; i < usersArray.length(); i++){
+			if(usersArray.getJSONObject(i).getJSONObject("access_type").getString(".tag").equals("owner")){
+				indice = i;
+				break;
+			}
+		}
+		autoreFile = usersArray.getJSONObject(indice).getJSONObject("user").getString("display_name");
+
+		return new File(nomeFile,"percorso",id,dimensioneFile,autoreFile,dataModifica);
+	}
+
+//	public File scaricaFile(String id){
+//		JSONObject obj;
+//		String jsonString = "{\"path\": \""+ id +"\"}";
+//		String token = "TOKEN";
+//		String url = "https://content.dropboxapi.com/2/files/download";
+//		RestTemplateBuilder restTemplate = null;
+//		BufferedOutputStream bufferedOutputStream = null;
+//		HttpHeaders headers = new HttpHeaders();
+//
+//		headers.set("Authorization", "Bearer " + token);
+//		headers.set("Dropbox-API-Arg", jsonString );
+//
+//
+//
+//		HttpEntity<String> entity = new HttpEntity<>(jsonString, headers); //genera qualcosa del tipo {requestJson}[headers]
+//		ResponseEntity<byte[]> response = restTemplate.build().exchange(url, HttpMethod.GET, entity, byte[].class);
+//
+//		bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(nomeFile));
+//		return true;
+//	}
+
 	
 	
 	

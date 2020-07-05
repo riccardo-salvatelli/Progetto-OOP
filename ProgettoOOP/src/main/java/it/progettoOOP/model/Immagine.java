@@ -17,9 +17,8 @@ public class Immagine extends it.progettoOOP.model.File {
 					String id,
 					int dimensione,
 					String autore,
-					Date dataCreazione,
 					Date dataUltimaModifica) {
-		super(nome, percorso, id, dimensione, autore, dataCreazione, dataUltimaModifica);
+		super(nome, percorso, id, dimensione, autore, dataUltimaModifica);
 
 		try {
 			this.dimImmagine = trovaRisoluzione();

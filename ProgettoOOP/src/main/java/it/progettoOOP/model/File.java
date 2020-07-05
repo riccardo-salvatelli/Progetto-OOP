@@ -9,7 +9,6 @@ public class File {
 	private String id;
 	private int dimensione;
 	private String autore;
-	private Date dataCreazione;
 	private Date dataUltimaModifica;
 	
 	
@@ -19,21 +18,19 @@ public class File {
 		this.id = null;
 		this.dimensione = -1;
 		this.autore = null;
-		this.dataCreazione = null;
 		this.dataUltimaModifica = null;
 	}
 
 	public File(String nome) {
 		this.nome = nome;
 	}
-	public File(String nome, String percorso, String id, int dimensione, String autore, Date dataCreazione,
+	public File(String nome, String percorso, String id, int dimensione, String autore,
 			Date dataUltimaModifica) {
 		this.nome = nome;
 		this.percorso = percorso;
 		this.id = id;
 		this.dimensione = dimensione;
 		this.autore = autore;
-		this.dataCreazione = dataCreazione;
 		this.dataUltimaModifica = dataUltimaModifica;
 	}
 
@@ -88,16 +85,6 @@ public class File {
 	}
 
 
-	public Date getDataCreazione() {
-		return dataCreazione;
-	}
-
-
-	public void setDataCreazione(Date dataCreazione) {
-		this.dataCreazione = dataCreazione;
-	}
-
-
 	public Date getDataUltimaModifica() {
 		return dataUltimaModifica;
 	}
@@ -107,13 +94,17 @@ public class File {
 		this.dataUltimaModifica = dataUltimaModifica;
 	}
 
-	
-	public void scaricaFile(String id) {
-		
-		
-		
-		
-		
+	@Override
+	public String toString() {
+		return "File{" +
+				"nome='" + nome + '\'' +
+				", percorso='" + percorso + '\'' +
+				", id='" + id + '\'' +
+				", dimensione=" + dimensione +
+				", autore='" + autore + '\'' +
+				", dataUltimaModifica=" + dataUltimaModifica +
+				'}';
 	}
+
 }
 	

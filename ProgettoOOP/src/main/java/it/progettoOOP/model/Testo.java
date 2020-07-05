@@ -9,10 +9,9 @@ public class Testo extends File {
 	private int numParole;
 	private int numFrasi;
 
-	public Testo(String nome, String percorso, String id, int dimensione, String autore, Date dataCreazione,
+	public Testo(String nome, String percorso, String id, int dimensione, String autore,
 			Date dataUltimaModifica) {
-		super(nome, percorso, id, dimensione,autore, dataCreazione,
-				 dataUltimaModifica);
+		super(nome, percorso, id, dimensione,autore, dataUltimaModifica);
 		this.numFrasi = this.conteggioNumeroFrasi();
 		this.numParole = this.conteggioNumeroParole();
 		this.numCaratteri = this.conteggioNumeroCaratteri();
