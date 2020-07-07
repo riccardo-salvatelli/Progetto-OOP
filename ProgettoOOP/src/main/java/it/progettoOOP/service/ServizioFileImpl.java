@@ -2,14 +2,11 @@ package it.progettoOOP.service;
 
 import it.progettoOOP.exception.ListaLocaleVuotaException;
 import it.progettoOOP.model.*;
-
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.*;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -91,7 +88,6 @@ public class ServizioFileImpl implements ServizioFile {
 	// l'utente proprietario del file. Ritorna un oggetto di tipo File completo di
 	// tutti gli attributi
 	// ricavati.
-	@SuppressWarnings("deprecation")
 	public File getInformazioniFile(String id) {
 		JSONObject obj;
 		String token = "Cxab77MLmfQAAAAAAAAA32xMRrsGZgT6587I0RU9hRispzH0LghQpltQNJGupPc7";
@@ -99,7 +95,7 @@ public class ServizioFileImpl implements ServizioFile {
 		String nomeFile;
 		String autoreFile;
 		int dimensioneFile;
-		Date dataModifica;
+		LocalDateTime dataUltimaModifica;
 		String jsonString = "{\"path\": \"" + id + "\"}";
 		HttpHeaders headers = new HttpHeaders();
 
@@ -112,11 +108,7 @@ public class ServizioFileImpl implements ServizioFile {
 																						// definisco l'obj (json)
 		nomeFile = obj.getString("name");
 		dimensioneFile = obj.getInt("size");
-		String appoggioData = obj.getString("client_modified");
-		dataModifica = new Date(Integer.parseInt(appoggioData.split("-")[0])-1900,
-				Integer.parseInt(appoggioData.split("-")[1])-1,
-				Integer.parseInt(appoggioData.split("-")[2].split("T")[0]));
-
+		dataUltimaModifica = LocalDateTime.parse(obj.getString("client_modified").split("Z")[0]);
 		url = "https://api.dropboxapi.com/2/sharing/list_file_members";
 		jsonString = "{\"file\": \"" + id + "\"}";
 		entity = new HttpEntity<>(jsonString, headers);
@@ -131,7 +123,7 @@ public class ServizioFileImpl implements ServizioFile {
 		}
 		autoreFile = usersArray.getJSONObject(indice).getJSONObject("user").getString("display_name");
 
-		return new File(nomeFile, System.getProperty("user.dir") + "\\fileScaricati\\" + nomeFile, id, dimensioneFile, autoreFile, dataModifica);
+		return new File(nomeFile, System.getProperty("user.dir") + "\\fileScaricati\\" + nomeFile, id, dimensioneFile, autoreFile, dataUltimaModifica);
 	}
 
 	public Boolean scaricaFile(String id) {

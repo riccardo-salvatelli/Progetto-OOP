@@ -1,15 +1,15 @@
 package it.progettoOOP.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class File {
 
 	private String nome;
 	private String percorso;
-	private String id;
+	private String id;	
 	private int dimensione;
 	private String autore;
-	private Date dataUltimaModifica;
+	private LocalDateTime dataUltimaModifica;
 	
 	
 	public File() {
@@ -19,13 +19,14 @@ public class File {
 		this.dimensione = -1;
 		this.autore = null;
 		this.dataUltimaModifica = null;
+		
 	}
 
 	public File(String nome) {
 		this.nome = nome;
 	}
 	public File(String nome, String percorso, String id, int dimensione, String autore,
-			Date dataUltimaModifica) {
+			LocalDateTime dataUltimaModifica) {
 		this.nome = nome;
 		this.percorso = percorso;
 		this.id = id;
@@ -85,12 +86,12 @@ public class File {
 	}
 
 
-	public Date getDataUltimaModifica() {
+	public LocalDateTime getDataUltimaModifica() {
 		return dataUltimaModifica;
 	}
 
 
-	public void setDataUltimaModifica(Date dataUltimaModifica) {
+	public void setDataUltimaModifica(LocalDateTime dataUltimaModifica) {
 		this.dataUltimaModifica = dataUltimaModifica;
 	}
 

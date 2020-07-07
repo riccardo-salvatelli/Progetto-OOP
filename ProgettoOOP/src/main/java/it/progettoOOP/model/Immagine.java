@@ -5,7 +5,7 @@ import it.progettoOOP.exception.imageWidthHeightException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.io.File;
 
 public class Immagine extends it.progettoOOP.model.File {
@@ -17,7 +17,7 @@ public class Immagine extends it.progettoOOP.model.File {
 					String id,
 					int dimensione,
 					String autore,
-					Date dataUltimaModifica) {
+					LocalDateTime dataUltimaModifica) {
 		super(nome, percorso, id, dimensione, autore, dataUltimaModifica);
 
 		try {

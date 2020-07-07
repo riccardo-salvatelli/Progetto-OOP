@@ -1,6 +1,6 @@
 package it.progettoOOP.model;
 import java.io.*;
-import java.util.*;
+import java.time.LocalDateTime;
 import it.progettoOOP.exception.NumCaratteriException;
 
 public class Testo extends File {
@@ -10,7 +10,7 @@ public class Testo extends File {
 	private int numFrasi;
 
 	public Testo(String nome, String percorso, String id, int dimensione, String autore,
-			Date dataUltimaModifica) {
+			LocalDateTime dataUltimaModifica) {
 		super(nome, percorso, id, dimensione,autore, dataUltimaModifica);
 		this.numFrasi = this.conteggioNumeroFrasi();
 		this.numParole = this.conteggioNumeroParole();
