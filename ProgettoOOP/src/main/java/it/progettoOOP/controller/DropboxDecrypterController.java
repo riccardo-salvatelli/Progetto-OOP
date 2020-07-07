@@ -1,13 +1,19 @@
 package it.progettoOOP.controller;
 
 import it.progettoOOP.service.ServizioFile;
-import it.progettoOOP.service.ServizioFileImpl;
+
+import java.nio.channels.NonReadableChannelException;
+import java.util.Collection;
+import java.util.Collections;
+
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import it.progettoOOP.exception.ListaLocaleVuotaException;
 import it.progettoOOP.model.File;
 
 @ComponentScan({"it.progettoOOP.service"}) //Necessario altrimenti il controller cerca ServizioFileImpl solamente all'interno del package "controller"
@@ -15,7 +21,7 @@ import it.progettoOOP.model.File;
 public class DropboxDecrypterController {
 
 	@Autowired
-	ServizioFileImpl servizioFile;
+	ServizioFile servizioFile;
 	
 	@GetMapping("/esempio")
 	public File esempio(@RequestParam(name="param1")String param1) {
@@ -28,11 +34,17 @@ public class DropboxDecrypterController {
 	}
 
 	//metodo che scarica un file da dropbox
-	@GetMapping("/scarica/")
-	public ResponseEntity<Object> scarica(@RequestBody String id) {
-		System.out.println("Ho scaricato i file criptati");
-		return null;
+	@PostMapping("/scarica")
+	public String scarica(@RequestBody String id) {
+		servizioFile.scaricaFile(id);
+		
+		return "Ho scaricato il file criptato " + servizioFile.getInformazioniFile(id).getNome();
 	}
+	@GetMapping("/listaLocale")
+	public Collection<File> getListaLocale() throws ListaLocaleVuotaException {
+		return servizioFile.getFiles();
+		}
+	
 	@GetMapping("/decripta")
 	public void decripta() {
 		//qui c'è un metodo che passa i file scaricati a decriptazione
