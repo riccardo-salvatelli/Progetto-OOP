@@ -150,4 +150,18 @@ public class ServizioFileImpl implements ServizioFile {
 		return aggiungiFile(file);
 
 	}
+	
+	//questo metodo ritorna una stringa per dire se Ã¨ un file
+	// di testo o immagine. Se non Ã¨ nessuna delle due ritorna null
+	// questo metodo viene chiamato all'interno di download
+	
+	public String tipoFile (File file) {						
+		String [] estensione = (file.getNome().split("."));
+		if(estensione[estensione.length -1].equals("txt")) {
+			return "Testo";
+			}else if (estensione[estensione.length -1].equals("jpeg") || estensione[estensione.length -1].equals("png") || estensione[estensione.length -1].equals("jpg")){
+			return "Immagine";
+			}
+		return null;
+	}
 }
