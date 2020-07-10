@@ -22,13 +22,19 @@ public class ServizioFileImpl implements ServizioFile {
 	private static Map<String,File> fileRepo = new HashMap<>();		// l'indice è di tipo String e non int perchè usiamo
 																	// Costruisce l'iteratore con il metodo dedicato
 	Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();	
-	private String token = "fWV4Pycc6rAAAAAAAAAAW95S3ErfKAfb_glZ9JRWKRNpM0dIQzKlE0POd01EAG7t";	// l'id del file che è di tipo String
+	private String token = "Cxab77MLmfQAAAAAAAAA8iYDNVxZt_dcpt1cuy0NsxmQTwnlNij74FZ5PJNobJeg";	// l'id del file che è di tipo String
 																						// Definisco l'iteratore per la lista dei file scaricati
 															
 
 	private Boolean aggiungiFile(File file) {
 		if (fileRepo.containsKey(file.getId())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Questo file è gia presente ..");
+		}
+		if (file.getTipoFile().equals("Testo")){
+			file = new Testo(file.getNome(),file.getPercorso(),file.getId(),file.getDimensione(),file.getAutore(),file.getDataUltimaModifica());
+		}
+		else if(file.getTipoFile().equals("Immagine")){
+			file = new Immagine(file.getNome(),file.getPercorso(),file.getId(),file.getDimensione(),file.getAutore(),file.getDataUltimaModifica());
 		}
 		fileRepo.put(file.getId(), file); // aggiungo un file all'hashmap
 		return true;
@@ -86,6 +92,7 @@ public class ServizioFileImpl implements ServizioFile {
 		return idsArray;
 	}
 
+
 	// Con questo metodo, a partire dall'id del file, si ricavano tutti gli
 	// attributi di esso.
 	// Viene prima fatta una request di tipo get_metadata, e poi list_file_members
@@ -126,8 +133,8 @@ public class ServizioFileImpl implements ServizioFile {
 			}
 		}
 		autoreFile = usersArray.getJSONObject(indice).getJSONObject("user").getString("display_name");
+		return new File(nomeFile, System.getProperty("user.dir") + "/fileScaricati/", id, dimensioneFile, autoreFile, dataUltimaModifica);
 
-		return new File(nomeFile, System.getProperty("user.dir") + "\\fileScaricati\\" + nomeFile, id, dimensioneFile, autoreFile, dataUltimaModifica);
 	}
 
 	public Boolean scaricaFile(String id, double [] chiavi) {
@@ -145,13 +152,7 @@ public class ServizioFileImpl implements ServizioFile {
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 		ResponseEntity<byte[]> response = restTemplate.build().exchange(url, HttpMethod.GET, entity, byte[].class);
 		decriptaFile(chiavi,file, response.getBody());
-//		try {
-//			Files.write(Paths.get(System.getProperty("user.dir") + "/fileScaricati/" + file.getNome()),
-//					response.getBody());
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		
+
 		return aggiungiFile(file);
 
 	}
@@ -159,22 +160,13 @@ public class ServizioFileImpl implements ServizioFile {
 	//questo metodo ritorna una stringa per dire se Ã¨ un file
 	// di testo o immagine. Se non Ã¨ nessuna delle due ritorna null
 	// questo metodo viene chiamato all'interno di download
-	
-	public String tipoFile (File file) {						
-		String [] estensione = (file.getNome().split("."));
-		if(estensione[estensione.length -1].equals("txt")) {
-			return "Testo";
-			}else if (estensione[estensione.length -1].equals("jpeg") || estensione[estensione.length -1].equals("png") || estensione[estensione.length -1].equals("jpg")){
-			return "Immagine";
-			}
-		return null;
-	}
+
 	
 	public int numeroTxt() {		// Con questo metodo vedo quanti file di testo sono stati scaricati.
 		int numeroTxt=0;			// uso l'iteratore per scorrere la lista dei file scaricati
 		while(it.hasNext()) {
-			Map.Entry<String,File>entry = (Map.Entry<String,File>)it.next();
-			if(tipoFile((File) entry.getValue())=="Testo") {
+			Map.Entry<String,File>entry = it.next();
+			if(entry.getValue().getTipoFile().equals("Testo")) {
 				numeroTxt += 1;
 			}
 		}return numeroTxt;

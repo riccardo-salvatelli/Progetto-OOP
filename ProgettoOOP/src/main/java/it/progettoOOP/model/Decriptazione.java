@@ -17,7 +17,7 @@ public class Decriptazione {
 	public void chaosXOR(byte [] by, int[] sequenza, String nomeFile){
 		BufferedOutputStream bufferedOutputStream = null;
 		try {
-			bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(System.getProperty("user.dir")+"/fileScaricati/dec_" + nomeFile));
+			bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(System.getProperty("user.dir")+"/fileScaricati/" + nomeFile));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

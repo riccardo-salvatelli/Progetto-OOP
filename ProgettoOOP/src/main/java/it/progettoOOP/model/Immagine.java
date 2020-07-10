@@ -31,7 +31,7 @@ public class Immagine extends it.progettoOOP.model.File {
 
 	public int [] trovaRisoluzione() throws imageWidthHeightException {
 		try {
-			BufferedImage bimg = ImageIO.read(new File(this.getNome()));
+			BufferedImage bimg = ImageIO.read(new File(this.getPercorso() + "/" + this.getNome()));
 			return new int[] {bimg.getWidth(), bimg.getHeight()};
 		} catch (IOException e) {
 			e.printStackTrace();

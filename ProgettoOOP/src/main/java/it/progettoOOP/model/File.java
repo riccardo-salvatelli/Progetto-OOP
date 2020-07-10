@@ -6,12 +6,12 @@ public class File {
 
 	private String nome;
 	private String percorso;
-	private String id;	
+	private String id;
 	private int dimensione;
 	private String autore;
 	private LocalDateTime dataUltimaModifica;
-	
-	
+	private String tipoFile;
+
 	public File() {
 		this.nome = null;
 		this.percorso = null;
@@ -19,21 +19,48 @@ public class File {
 		this.dimensione = -1;
 		this.autore = null;
 		this.dataUltimaModifica = null;
-		
+		this.tipoFile = null;
 	}
+
+
 
 	public File(String nome) {
 		this.nome = nome;
 	}
 	public File(String nome, String percorso, String id, int dimensione, String autore,
-			LocalDateTime dataUltimaModifica) {
+				LocalDateTime dataUltimaModifica) {
 		this.nome = nome;
 		this.percorso = percorso;
 		this.id = id;
 		this.dimensione = dimensione;
 		this.autore = autore;
 		this.dataUltimaModifica = dataUltimaModifica;
+		this.tipoFile = tipoFile(nome);
 	}
+
+
+	//questo metodo ritorna una stringa per dire se Ã¨ un file
+	// di testo o immagine. Se non Ã¨ nessuna delle due ritorna null
+	public String tipoFile (String nomeFile) {
+		String estensione = nomeFile.split("\\.")[nomeFile.split("\\.").length - 1];
+		if(estensione.equals("txt")) {
+			return "Testo";
+		}else if (estensione.equals("jpeg") || estensione.equals("png") || estensione.equals("jpg")){
+			return "Immagine";
+		}
+		return null;
+	}
+
+	public String getTipoFile() {
+		return tipoFile;
+	}
+
+
+
+	public void setTipoFile(String tipoFile) {
+		this.tipoFile = tipoFile;
+	}
+
 
 
 	public String getNome() {
@@ -108,4 +135,3 @@ public class File {
 	}
 
 }
-	
