@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import it.progettoOOP.exception.ListaLocaleVuotaException;
+import it.progettoOOP.model.Credenziali;
 import it.progettoOOP.model.File;
 
 @ComponentScan({"it.progettoOOP.service"}) //Necessario altrimenti il controller cerca ServizioFileImpl solamente all'interno del package "controller"
@@ -35,10 +36,10 @@ public class DropboxDecrypterController {
 
 	//metodo che scarica un file da dropbox
 	@PostMapping("/scarica")
-	public String scarica(@RequestBody String id) {
-		servizioFile.scaricaFile(id);
+	public String scarica(@RequestBody Credenziali cre) {
+		servizioFile.scaricaFile(cre.getId(),cre.getChiavi());
 		
-		return "Ho scaricato il file criptato " + servizioFile.getInformazioniFile(id).getNome();
+		return "Ho scaricato il file criptato " + servizioFile.getInformazioniFile(cre.getId()).getNome();
 	}
 	@GetMapping("/listaLocale")
 	public Collection<File> getListaLocale() throws ListaLocaleVuotaException {
