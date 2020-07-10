@@ -1,5 +1,5 @@
 package it.progettoOOP.service;
-
+import it.progettoOOP.model.*;
 import it.progettoOOP.exception.ListaLocaleVuotaException;
 import it.progettoOOP.model.*;
 import java.io.IOException;
@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Map.Entry;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -17,9 +19,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ServizioFileImpl implements ServizioFile {
-	private static Map<String, File> fileRepo = new HashMap<>(); // l'indice è di tipo String e non int perchè usiamo
-																	// l'id del file che
-																	// di tipo string
+	private static Map<String,File> fileRepo = new HashMap<>();		// l'indice è di tipo String e non int perchè usiamo
+																	// Costruisce l'iteratore con il metodo dedicato
+	Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();	
+	private String token = "fWV4Pycc6rAAAAAAAAAAW95S3ErfKAfb_glZ9JRWKRNpM0dIQzKlE0POd01EAG7t";	// l'id del file che è di tipo String
+																						// Definisco l'iteratore per la lista dei file scaricati
+															
 
 	private Boolean aggiungiFile(File file) {
 		if (fileRepo.containsKey(file.getId())) {
@@ -58,7 +63,7 @@ public class ServizioFileImpl implements ServizioFile {
 	// rispettivo nome file.
 	public String[] getListaFile() {
 		JSONObject obj;
-		String token = "Cxab77MLmfQAAAAAAAAA32xMRrsGZgT6587I0RU9hRispzH0LghQpltQNJGupPc7";
+		 
 		String url = "https://api.dropboxapi.com/2/files/list_folder";
 		HttpHeaders headers = new HttpHeaders();
 
@@ -90,7 +95,6 @@ public class ServizioFileImpl implements ServizioFile {
 	// ricavati.
 	public File getInformazioniFile(String id) {
 		JSONObject obj;
-		String token = "Cxab77MLmfQAAAAAAAAA32xMRrsGZgT6587I0RU9hRispzH0LghQpltQNJGupPc7";
 		String url = "https://api.dropboxapi.com/2/files/get_metadata";
 		String nomeFile;
 		String autoreFile;
@@ -126,11 +130,10 @@ public class ServizioFileImpl implements ServizioFile {
 		return new File(nomeFile, System.getProperty("user.dir") + "\\fileScaricati\\" + nomeFile, id, dimensioneFile, autoreFile, dataUltimaModifica);
 	}
 
-	public Boolean scaricaFile(String id) {
+	public Boolean scaricaFile(String id, double [] chiavi) {
 		File file = getInformazioniFile(id); // prendo le informazioni di un oggetto file per avere poi il nome del file
 												// sotto
 		String jsonString = "{\"path\": \"" + id + "\"}";
-		String token = "Cxab77MLmfQAAAAAAAAA32xMRrsGZgT6587I0RU9hRispzH0LghQpltQNJGupPc7";
 		String url = "https://content.dropboxapi.com/2/files/download";
 		RestTemplateBuilder restTemplate = new RestTemplateBuilder();
 		HttpHeaders headers = new HttpHeaders();
@@ -141,12 +144,14 @@ public class ServizioFileImpl implements ServizioFile {
 
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 		ResponseEntity<byte[]> response = restTemplate.build().exchange(url, HttpMethod.GET, entity, byte[].class);
-		try {
-			Files.write(Paths.get(System.getProperty("user.dir") + "/fileScaricati/" + file.getNome()),
-					response.getBody());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		decriptaFile(chiavi,file, response.getBody());
+//		try {
+//			Files.write(Paths.get(System.getProperty("user.dir") + "/fileScaricati/" + file.getNome()),
+//					response.getBody());
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		
 		return aggiungiFile(file);
 
 	}
@@ -163,5 +168,22 @@ public class ServizioFileImpl implements ServizioFile {
 			return "Immagine";
 			}
 		return null;
+	}
+	
+	public int numeroTxt() {		// Con questo metodo vedo quanti file di testo sono stati scaricati.
+		int numeroTxt=0;			// uso l'iteratore per scorrere la lista dei file scaricati
+		while(it.hasNext()) {
+			Map.Entry<String,File>entry = (Map.Entry<String,File>)it.next();
+			if(tipoFile((File) entry.getValue())=="Testo") {
+				numeroTxt += 1;
+			}
+		}return numeroTxt;
+	}
+	
+	public void decriptaFile (double [] chiavi, File file,byte [] by ) {
+		Decriptazione decr = new Decriptazione(chiavi);
+		
+		int [] sequenza = decr.calcoloSequenza(file.getDimensione());
+		decr.chaosXOR(by, sequenza, file.getNome());
 	}
 }
