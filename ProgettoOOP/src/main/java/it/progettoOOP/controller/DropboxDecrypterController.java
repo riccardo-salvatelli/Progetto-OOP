@@ -48,13 +48,32 @@ public class DropboxDecrypterController {
 	//restituisce il numero di file di testo scaricati
 	@GetMapping("/numeroTxt")
 	public ResponseEntity<Object> getTxt(){
-		return new ResponseEntity<>(servizioFile.numeroTxt(), HttpStatus.OK);
+		return new ResponseEntity<>("Il numero di file di testo (.txt) è: " + servizioFile.numeroTxt(), HttpStatus.OK);
 	}
-	
-	@GetMapping("/decripta")
-	public void decripta() {
-		//qui c'è un metodo che passa i file scaricati a decriptazione
-		System.out.println("Ho decriptato i file");
+	@GetMapping("/numeroImm")
+	public ResponseEntity<Object> getImm(){
+		return new ResponseEntity<>("Il numero di immagini (.jpeg .png .jpg) è " + servizioFile.numeroImm(), HttpStatus.OK);
+	}
+	@GetMapping("/mediaParole")
+	public ResponseEntity<Object> getMediaNumeroParole(){
+		return new ResponseEntity<>("La media di parole trovate nei testi è " + servizioFile.mediaNumeroParole(), HttpStatus.OK);
+	}
+	@GetMapping("/mediaFrasi")
+	public ResponseEntity<Object> getMediaNumeroFrasi(){
+		return new ResponseEntity<>("La media di frasi trovate nei testi è " + servizioFile.mediaNumeroFrasi(), HttpStatus.OK);
+	}
+	@GetMapping("/mediaPixel")
+	public ResponseEntity<Object> getMediaNumeroPixel(){
+		return new ResponseEntity<>("La media di pixel trovate nei testi è " + servizioFile.mediaNumeroParole(), HttpStatus.OK);
+	}
+	@GetMapping("/mediaDimImm")
+	public ResponseEntity<Object> getMediaDimensionImmagini(){
+		double[] mediaDimImm = servizioFile.mediaDimensioniImmagini();
+		return new ResponseEntity<>("La media delle dimensioni delle immagini è " + mediaDimImm[0] + "x" + mediaDimImm[1], HttpStatus.OK);
+	}
+	@GetMapping("/statAutori")
+	public ResponseEntity<Object> getStatAutori(){
+		return new ResponseEntity<>("La percentuale di caricamento degli autori è" + servizioFile.statAutori(), HttpStatus.OK);
 	}
 }
 	

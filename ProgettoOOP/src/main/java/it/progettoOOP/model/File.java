@@ -48,7 +48,7 @@ public class File {
 		}else if (estensione.equals("jpeg") || estensione.equals("png") || estensione.equals("jpg")){
 			return "Immagine";
 		}
-		return null;
+		return "File";
 	}
 
 	public String getTipoFile() {

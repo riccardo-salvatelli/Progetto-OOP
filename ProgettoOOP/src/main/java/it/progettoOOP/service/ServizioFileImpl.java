@@ -1,4 +1,5 @@
 package it.progettoOOP.service;
+
 import it.progettoOOP.model.*;
 import it.progettoOOP.exception.ListaLocaleVuotaException;
 import it.progettoOOP.model.*;
@@ -19,22 +20,22 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ServizioFileImpl implements ServizioFile {
-	private static Map<String,File> fileRepo = new HashMap<>();		// l'indice è di tipo String e non int perchè usiamo
+	private static Map<String, File> fileRepo = new HashMap<>(); // l'indice è di tipo String e non int perchè usiamo
 																	// Costruisce l'iteratore con il metodo dedicato
-	Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();	
-	private String token = "Cxab77MLmfQAAAAAAAAA8iYDNVxZt_dcpt1cuy0NsxmQTwnlNij74FZ5PJNobJeg";	// l'id del file che è di tipo String
-																						// Definisco l'iteratore per la lista dei file scaricati
-															
+	private String token = "Cxab77MLmfQAAAAAAAAA8iYDNVxZt_dcpt1cuy0NsxmQTwnlNij74FZ5PJNobJeg"; // l'id del file che è di
+																								// tipo String
+	// Definisco l'iteratore per la lista dei file scaricati
 
 	private Boolean aggiungiFile(File file) {
 		if (fileRepo.containsKey(file.getId())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Questo file è gia presente ..");
 		}
-		if (file.getTipoFile().equals("Testo")){
-			file = new Testo(file.getNome(),file.getPercorso(),file.getId(),file.getDimensione(),file.getAutore(),file.getDataUltimaModifica());
-		}
-		else if(file.getTipoFile().equals("Immagine")){
-			file = new Immagine(file.getNome(),file.getPercorso(),file.getId(),file.getDimensione(),file.getAutore(),file.getDataUltimaModifica());
+		if (file.getTipoFile().equals("Testo")) {
+			file = new Testo(file.getNome(), file.getPercorso(), file.getId(), file.getDimensione(), file.getAutore(),
+					file.getDataUltimaModifica());
+		} else if (file.getTipoFile().equals("Immagine")) {
+			file = new Immagine(file.getNome(), file.getPercorso(), file.getId(), file.getDimensione(),
+					file.getAutore(), file.getDataUltimaModifica());
 		}
 		fileRepo.put(file.getId(), file); // aggiungo un file all'hashmap
 		return true;
@@ -55,10 +56,9 @@ public class ServizioFileImpl implements ServizioFile {
 	}
 
 	public Collection<File> getFiles() throws ListaLocaleVuotaException { // ottengo la lista dei files
-		if(fileRepo.isEmpty()) {
+		if (fileRepo.isEmpty()) {
 			throw new ListaLocaleVuotaException();
-		}
-		else {
+		} else {
 			return fileRepo.values();
 		}
 	}
@@ -69,7 +69,7 @@ public class ServizioFileImpl implements ServizioFile {
 	// rispettivo nome file.
 	public String[] getListaFile() {
 		JSONObject obj;
-		 
+
 		String url = "https://api.dropboxapi.com/2/files/list_folder";
 		HttpHeaders headers = new HttpHeaders();
 
@@ -78,7 +78,7 @@ public class ServizioFileImpl implements ServizioFile {
 
 		RestTemplate restTemplate = new RestTemplate();
 
-		String requestJson = "{\"path\": \"\",\"recursive\": false,\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false,\"include_mounted_folders\": true,\"include_non_downloadable_files\": true}";
+		String requestJson = "{\"path\": \"/file condivisi\",\"recursive\": false,\"include_media_info\": false,\"include_deleted\": false,\"include_has_explicit_shared_members\": false,\"include_mounted_folders\": true,\"include_non_downloadable_files\": true}";
 
 		HttpEntity<String> entity = new HttpEntity<>(requestJson, headers); // genera qualcosa del tipo
 																			// {requestJson}[headers]
@@ -91,7 +91,6 @@ public class ServizioFileImpl implements ServizioFile {
 		}
 		return idsArray;
 	}
-
 
 	// Con questo metodo, a partire dall'id del file, si ricavano tutti gli
 	// attributi di esso.
@@ -133,11 +132,12 @@ public class ServizioFileImpl implements ServizioFile {
 			}
 		}
 		autoreFile = usersArray.getJSONObject(indice).getJSONObject("user").getString("display_name");
-		return new File(nomeFile, System.getProperty("user.dir") + "/fileScaricati/", id, dimensioneFile, autoreFile, dataUltimaModifica);
+		return new File(nomeFile, System.getProperty("user.dir") + "/fileScaricati/", id, dimensioneFile, autoreFile,
+				dataUltimaModifica);
 
 	}
 
-	public Boolean scaricaFile(String id, double [] chiavi) {
+	public Boolean scaricaFile(String id, double[] chiavi) {
 		File file = getInformazioniFile(id); // prendo le informazioni di un oggetto file per avere poi il nome del file
 												// sotto
 		String jsonString = "{\"path\": \"" + id + "\"}";
@@ -151,106 +151,140 @@ public class ServizioFileImpl implements ServizioFile {
 
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 		ResponseEntity<byte[]> response = restTemplate.build().exchange(url, HttpMethod.GET, entity, byte[].class);
-		decriptaFile(chiavi,file, response.getBody());
+		decriptaFile(chiavi, file, response.getBody());
 
 		return aggiungiFile(file);
 
 	}
-	
-	public void decriptaFile (double [] chiavi, File file,byte [] by ) {
+
+	public void decriptaFile(double[] chiavi, File file, byte[] by) {
 		Decriptazione decr = new Decriptazione(chiavi);
-		
-		int [] sequenza = decr.calcoloSequenza(file.getDimensione());
+
+		int[] sequenza = decr.calcoloSequenza(file.getDimensione());
 		decr.chaosXOR(by, sequenza, file.getNome());
 	}
-	
-	//Questo metodo serve per contare quanti file di tipo Testo sono presenti
-	//nell'Hashmap. Utilizza il metodo getTipoFile per confrontare se effettivamente 
-	//si tratta di un file di testo
-	//la condizione del while è bool e cicla fino a quando c'è un altro elemento
-	//Uso l'iteratore
+
+	// Questo metodo serve per contare quanti file di tipo Testo sono presenti
+	// nell'Hashmap. Utilizza il metodo getTipoFile per confrontare se
+	// effettivamente
+	// si tratta di un file di testo
+	// la condizione del while è bool e cicla fino a quando c'è un altro elemento
+	// Uso l'iteratore
 	public int numeroTxt() {
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
-		int numeroTxt=0;			
-		while(it.hasNext()) {
-			Map.Entry<String,File>entry = it.next();
-			if(entry.getValue().getTipoFile().equals("Testo")) {
+		int numeroTxt = 0;
+		while (it.hasNext()) {
+			Map.Entry<String, File> entry = it.next();
+			if (entry.getValue().getTipoFile().equals("Testo")) {
 				numeroTxt += 1;
 			}
-		}return numeroTxt;
+		}
+		return numeroTxt;
 	}
-	
-	
-	//Questo metodo serve per contare quanti file di tipo Immagine sono presenti
-		//nell'Hashmap. Utilizza il metodo getTipoFile per confrontare se effettivamente 
-		//si tratta di un file di Immagine.
-		//la condizione del while è bool e cicla fino a quando c'è un altro elemento
-		//Uso l'iteratore
-	
+
+	// Questo metodo serve per contare quanti file di tipo Immagine sono presenti
+	// nell'Hashmap. Utilizza il metodo getTipoFile per confrontare se
+	// effettivamente
+	// si tratta di un file di Immagine.
+	// la condizione del while è bool e cicla fino a quando c'è un altro elemento
+	// Uso l'iteratore
+
 	public int numeroImm() {
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
-		int numeroImm=0;			
-		while(it.hasNext()) {
-			Map.Entry<String,File>entry = it.next();
-			if(entry.getValue().getTipoFile().equals("Immagine")) {
+		int numeroImm = 0;
+		while (it.hasNext()) {
+			Map.Entry<String, File> entry = it.next();
+			if (entry.getValue().getTipoFile().equals("Immagine")) {
 				numeroImm += 1;
 			}
-		}return numeroImm;
+		}
+		return numeroImm;
 	}
-	
-	//Con questo metodo si calcola la media delle parole contenute in tutti i file di tipo Testo 
-	//presenti nell'hashmap. Definisco un iteratore interno al metodo.
+
+	// Con questo metodo si calcola la media delle parole contenute in tutti i file
+	// di tipo Testo
+	// presenti nell'hashmap. Definisco un iteratore interno al metodo.
 	//
-	
-	public double medianumeroParole() {		
+
+	public double mediaNumeroParole() {
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
-		int numeroParole=0;
+		int numeroParole = 0;
 		double media;
-		while(it.hasNext()) {
-			Map.Entry<String,File>entry = it.next();
-			if(entry.getValue().getTipoFile().equals("Testo")) {
-				numeroParole += ((Testo)entry.getValue()).conteggioNumeroParole();
+		while (it.hasNext()) {
+			Map.Entry<String, File> entry = it.next();
+			if (entry.getValue().getTipoFile().equals("Testo")) {
+				numeroParole += ((Testo) entry.getValue()).conteggioNumeroParole();
 			}
-		}media = numeroParole/numeroTxt();
+		}
+		media = numeroParole / numeroTxt();
 		return media;
 	}
-	
-	public double medianumeroFrasi() {
+
+	public double mediaNumeroFrasi() {
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
-		int numeroFrasi=0;
+		int numeroFrasi = 0;
 		double media;// uso l'iteratore per scorrere la lista dei file scaricati
-		while(it.hasNext()) {
-			Map.Entry<String,File>entry = it.next();
-			if(entry.getValue().getTipoFile().equals("Testo")) {
-				numeroFrasi += ((Testo)entry.getValue()).conteggioNumeroFrasi();
+		while (it.hasNext()) {
+			Map.Entry<String, File> entry = it.next();
+			if (entry.getValue().getTipoFile().equals("Testo")) {
+				numeroFrasi += ((Testo) entry.getValue()).conteggioNumeroFrasi();
 			}
-		}media = numeroFrasi/numeroTxt();
+		}
+		media = numeroFrasi / numeroTxt();
 		return media;
 	}
-	
-	public double medianumeroCaratteri() {
+
+	public double mediaNumeroCaratteri() {
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
-		int numeroCaratteri=0;
+		int numeroCaratteri = 0;
 		double media;
-		while(it.hasNext()) {
-			Map.Entry<String,File>entry = it.next();
-			if(entry.getValue().getTipoFile().equals("Testo")) {
-				numeroCaratteri += ((Testo)entry.getValue()).conteggioNumeroCaratteri();
+		while (it.hasNext()) {
+			Map.Entry<String, File> entry = it.next();
+			if (entry.getValue().getTipoFile().equals("Testo")) {
+				numeroCaratteri += ((Testo) entry.getValue()).conteggioNumeroCaratteri();
 			}
-		}media = numeroCaratteri/numeroTxt();
+		}
+		media = numeroCaratteri / numeroTxt();
 		return media;
 	}
-	
+
 	public double mediaNumeroPixel() {
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
-		int numPixel=0;
-		double media; 
-		while(it.hasNext()) {
-			Map.Entry<String,File>entry = it.next();
-			if(entry.getValue().getTipoFile().equals("Immagine")) {
-				numPixel += ((Immagine)entry.getValue()).getNumPixel();
+		int numPixel = 0;
+		double media;
+		while (it.hasNext()) {
+			Map.Entry<String, File> entry = it.next();
+			if (entry.getValue().getTipoFile().equals("Immagine")) {
+				numPixel += ((Immagine) entry.getValue()).getNumPixel();
+			}
 		}
-	}media = numPixel/numeroImm();
-	return media;
+		media = numPixel / numeroImm();
+		return media;
 	}
+
+	public double[] mediaDimensioniImmagini() {
+		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
+		double numPixelAlt = 0;
+		double numPixelLar = 0;
+		int numeroImm = numeroImm();
+		while (it.hasNext()) {
+			Map.Entry<String, File> entry = it.next();
+			if (entry.getValue().getTipoFile().equals("Immagine")) {
+				numPixelLar += ((Immagine) entry.getValue()).getDimImmagine()[0];
+				numPixelAlt += ((Immagine) entry.getValue()).getDimImmagine()[1];
+			}
+		}
+		return new double[] { numPixelLar / numeroImm, numPixelAlt / numeroImm };
+	}
+	public HashMap<String, Double> statAutori() {
+		HashMap<String, Double> autori = new HashMap<String, Double>();
+		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, File> entry = it.next();
+			autori.merge(entry.getValue().getAutore(), 1.0, Double::sum);
+		}
+		return autori;
+	}
+	
+
 }

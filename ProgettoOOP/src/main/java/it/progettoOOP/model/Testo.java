@@ -68,7 +68,7 @@ public class Testo extends File {
 	public int conteggioNumeroParole() {
 		int i = 0;
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(this.getPercorso()));
+			BufferedReader reader = new BufferedReader(new FileReader(this.getPercorso() + "/" + this.getNome()));
 			int next = reader.read();
 			if(next !=-1) {
 				do {
@@ -89,7 +89,7 @@ public class Testo extends File {
 	public int conteggioNumeroCaratteri() {
 		int i = 0;
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(this.getPercorso()));
+			BufferedReader reader = new BufferedReader(new FileReader(this.getPercorso() + "/" + this.getNome()));
 			int next = reader.read();
 			if(next !=-1) {
 				do {  //conto quanti spazi incontro così da sapere i caratteri
