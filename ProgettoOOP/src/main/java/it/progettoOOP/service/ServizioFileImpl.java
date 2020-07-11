@@ -119,19 +119,15 @@ public class ServizioFileImpl implements ServizioFile {
 		nomeFile = obj.getString("name");
 		dimensioneFile = obj.getInt("size");
 		dataUltimaModifica = LocalDateTime.parse(obj.getString("client_modified").split("Z")[0]);
-		url = "https://api.dropboxapi.com/2/sharing/list_file_members";
-		jsonString = "{\"file\": \"" + id + "\"}";
+		autoreFile = obj.getJSONObject("sharing_info").getString("modified_by"); //Contiene l'id dell'utente
+
+		//Ricavo il parametro display_name con il metodo get_account
+		url = "https://api.dropboxapi.com/2/users/get_account";
+		jsonString = "{\"account_id\": \"" + autoreFile + "\"}";
 		entity = new HttpEntity<>(jsonString, headers);
 		obj = new JSONObject(restTemplate.postForObject(url, entity, String.class));
-		JSONArray usersArray = obj.getJSONArray("users");
-		int indice = 0;
-		for (int i = 0; i < usersArray.length(); i++) {
-			if (usersArray.getJSONObject(i).getJSONObject("access_type").getString(".tag").equals("owner")) {
-				indice = i;
-				break;
-			}
-		}
-		autoreFile = usersArray.getJSONObject(indice).getJSONObject("user").getString("display_name");
+		autoreFile = obj.getJSONObject("name").getString("display_name");
+
 		return new File(nomeFile, System.getProperty("user.dir") + "/fileScaricati/", id, dimensioneFile, autoreFile,
 				dataUltimaModifica);
 
@@ -216,7 +212,7 @@ public class ServizioFileImpl implements ServizioFile {
 				numeroParole += ((Testo) entry.getValue()).conteggioNumeroParole();
 			}
 		}
-		media = numeroParole / numeroTxt();
+		media = (double)numeroParole / numeroTxt();
 		return media;
 	}
 
@@ -230,7 +226,7 @@ public class ServizioFileImpl implements ServizioFile {
 				numeroFrasi += ((Testo) entry.getValue()).conteggioNumeroFrasi();
 			}
 		}
-		media = numeroFrasi / numeroTxt();
+		media = (double)numeroFrasi / numeroTxt();
 		return media;
 	}
 
@@ -244,7 +240,7 @@ public class ServizioFileImpl implements ServizioFile {
 				numeroCaratteri += ((Testo) entry.getValue()).conteggioNumeroCaratteri();
 			}
 		}
-		media = numeroCaratteri / numeroTxt();
+		media = (double)numeroCaratteri / numeroTxt();
 		return media;
 	}
 
@@ -258,7 +254,7 @@ public class ServizioFileImpl implements ServizioFile {
 				numPixel += ((Immagine) entry.getValue()).getNumPixel();
 			}
 		}
-		media = numPixel / numeroImm();
+		media = (double)numPixel / numeroImm();
 		return media;
 	}
 
@@ -277,7 +273,7 @@ public class ServizioFileImpl implements ServizioFile {
 		return new double[] { numPixelLar / numeroImm, numPixelAlt / numeroImm };
 	}
 	public HashMap<String, Double> statAutori() {
-		HashMap<String, Double> autori = new HashMap<String, Double>();
+		HashMap<String, Double> autori = new HashMap<>();
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<String, File> entry = it.next();
@@ -285,6 +281,4 @@ public class ServizioFileImpl implements ServizioFile {
 		}
 		return autori;
 	}
-	
-
 }
