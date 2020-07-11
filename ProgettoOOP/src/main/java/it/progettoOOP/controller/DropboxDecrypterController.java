@@ -45,6 +45,11 @@ public class DropboxDecrypterController {
 	public Collection<File> getListaLocale() throws ListaLocaleVuotaException {
 		return servizioFile.getFiles();
 		}
+	//restituisce il numero di file di testo scaricati
+//	@GetMapping("/numeroTxt")
+//	public String getTxt(){
+//		return "il numero di file di tipo Testo è" +servizioFile.numeroTxt();
+//	}
 	
 	@GetMapping("/decripta")
 	public void decripta() {

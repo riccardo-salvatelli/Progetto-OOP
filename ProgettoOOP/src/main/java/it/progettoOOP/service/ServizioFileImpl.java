@@ -157,13 +157,21 @@ public class ServizioFileImpl implements ServizioFile {
 
 	}
 	
-	//questo metodo ritorna una stringa per dire se Ã¨ un file
-	// di testo o immagine. Se non Ã¨ nessuna delle due ritorna null
-	// questo metodo viene chiamato all'interno di download
-
+	public void decriptaFile (double [] chiavi, File file,byte [] by ) {
+		Decriptazione decr = new Decriptazione(chiavi);
+		
+		int [] sequenza = decr.calcoloSequenza(file.getDimensione());
+		decr.chaosXOR(by, sequenza, file.getNome());
+	}
 	
-	public int numeroTxt() {		// Con questo metodo vedo quanti file di testo sono stati scaricati.
-		int numeroTxt=0;			// uso l'iteratore per scorrere la lista dei file scaricati
+	//Questo metodo serve per contare quanti file di tipo Testo sono presenti
+	//nell'Hashmap. Utilizza il metodo getTipoFile per confrontare se effettivamente 
+	//si tratta di un file di testo
+	//la condizione del while è bool e cicla fino a quando c'è un altro elemento
+	//Uso l'iteratore
+	public int numeroTxt() {
+		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
+		int numeroTxt=0;			
 		while(it.hasNext()) {
 			Map.Entry<String,File>entry = it.next();
 			if(entry.getValue().getTipoFile().equals("Testo")) {
@@ -172,10 +180,77 @@ public class ServizioFileImpl implements ServizioFile {
 		}return numeroTxt;
 	}
 	
-	public void decriptaFile (double [] chiavi, File file,byte [] by ) {
-		Decriptazione decr = new Decriptazione(chiavi);
-		
-		int [] sequenza = decr.calcoloSequenza(file.getDimensione());
-		decr.chaosXOR(by, sequenza, file.getNome());
+	
+	//Questo metodo serve per contare quanti file di tipo Immagine sono presenti
+		//nell'Hashmap. Utilizza il metodo getTipoFile per confrontare se effettivamente 
+		//si tratta di un file di Immagine.
+		//la condizione del while è bool e cicla fino a quando c'è un altro elemento
+		//Uso l'iteratore
+	
+	public int numeroImm() {
+		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
+		int numeroImm=0;			
+		while(it.hasNext()) {
+			Map.Entry<String,File>entry = it.next();
+			if(entry.getValue().getTipoFile().equals("Immagine")) {
+				numeroImm += 1;
+			}
+		}return numeroImm;
+	}
+	
+	//Con questo metodo si calcola la media delle parole contenute in tutti i file di tipo Testo 
+	//presenti nell'hashmap. Definisco un iteratore interno al metodo.
+	//
+	
+	public double medianumeroParole() {		
+		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
+		int numeroParole=0;
+		double media;
+		while(it.hasNext()) {
+			Map.Entry<String,File>entry = it.next();
+			if(entry.getValue().getTipoFile().equals("Testo")) {
+				numeroParole += ((Testo)entry.getValue()).conteggioNumeroParole();
+			}
+		}media = numeroParole/numeroTxt();
+		return media;
+	}
+	
+	public double medianumeroFrasi() {
+		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
+		int numeroFrasi=0;
+		double media;// uso l'iteratore per scorrere la lista dei file scaricati
+		while(it.hasNext()) {
+			Map.Entry<String,File>entry = it.next();
+			if(entry.getValue().getTipoFile().equals("Testo")) {
+				numeroFrasi += ((Testo)entry.getValue()).conteggioNumeroFrasi();
+			}
+		}media = numeroFrasi/numeroTxt();
+		return media;
+	}
+	
+	public double medianumeroCaratteri() {
+		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
+		int numeroCaratteri=0;
+		double media;
+		while(it.hasNext()) {
+			Map.Entry<String,File>entry = it.next();
+			if(entry.getValue().getTipoFile().equals("Testo")) {
+				numeroCaratteri += ((Testo)entry.getValue()).conteggioNumeroCaratteri();
+			}
+		}media = numeroCaratteri/numeroTxt();
+		return media;
+	}
+	
+	public double mediaNumeroPixel() {
+		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
+		int numPixel=0;
+		double media; 
+		while(it.hasNext()) {
+			Map.Entry<String,File>entry = it.next();
+			if(entry.getValue().getTipoFile().equals("Immagine")) {
+				numPixel += ((Immagine)entry.getValue()).getNumPixel();
+		}
+	}media = numPixel/numeroImm();
+	return media;
 	}
 }
