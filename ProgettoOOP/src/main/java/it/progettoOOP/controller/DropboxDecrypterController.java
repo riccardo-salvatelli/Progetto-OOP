@@ -46,10 +46,10 @@ public class DropboxDecrypterController {
 		return servizioFile.getFiles();
 		}
 	//restituisce il numero di file di testo scaricati
-//	@GetMapping("/numeroTxt")
-//	public String getTxt(){
-//		return "il numero di file di tipo Testo è" +servizioFile.numeroTxt();
-//	}
+	@GetMapping("/numeroTxt")
+	public ResponseEntity<Object> getTxt(){
+		return new ResponseEntity<>(servizioFile.numeroTxt(), HttpStatus.OK);
+	}
 	
 	@GetMapping("/decripta")
 	public void decripta() {
