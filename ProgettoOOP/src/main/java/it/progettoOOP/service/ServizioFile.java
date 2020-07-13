@@ -1,7 +1,9 @@
 package it.progettoOOP.service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Vector;
 
 import it.progettoOOP.exception.ListaLocaleVuotaException;
 import it.progettoOOP.model.File;
@@ -21,4 +23,5 @@ public interface ServizioFile {
 	public abstract double mediaNumeroPixel();
 	public abstract double[] mediaDimensioniImmagini();
 	public abstract HashMap<String, Double> statAutori();
-}
+	public abstract Vector<File> filtraPerData(LocalDateTime dataInizio, LocalDateTime dataFine);
+	}

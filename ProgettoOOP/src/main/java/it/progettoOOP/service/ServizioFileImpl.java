@@ -6,7 +6,9 @@ import it.progettoOOP.model.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -184,7 +186,6 @@ public class ServizioFileImpl implements ServizioFile {
 	// si tratta di un file di Immagine.
 	// la condizione del while è bool e cicla fino a quando c'è un altro elemento
 	// Uso l'iteratore
-
 	public int numeroImm() {
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
 		int numeroImm = 0;
@@ -201,7 +202,6 @@ public class ServizioFileImpl implements ServizioFile {
 	// di tipo Testo
 	// presenti nell'hashmap. Definisco un iteratore interno al metodo.
 	//
-
 	public double mediaNumeroParole() {
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
 		int numeroParole = 0;
@@ -272,6 +272,7 @@ public class ServizioFileImpl implements ServizioFile {
 		}
 		return new double[] { numPixelLar / numeroImm, numPixelAlt / numeroImm };
 	}
+
 	public HashMap<String, Double> statAutori() {
 		HashMap<String, Double> autori = new HashMap<>();
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
@@ -279,6 +280,25 @@ public class ServizioFileImpl implements ServizioFile {
 			Map.Entry<String, File> entry = it.next();
 			autori.merge(entry.getValue().getAutore(), 1.0, Double::sum);
 		}
+
+
+		for (Entry<String, Double> entry : autori.entrySet()) {
+			entry.setValue(Math.floor(entry.getValue()*100/fileRepo.size()));
+		}
 		return autori;
+	}
+
+	//Prende in input due date con le quali filtra i file salvati nell'hasmap. Ritorna il vettore dei file che soddisfano
+	//il filtro. Per omettere dataInizio, o dataFine, bisogna valorizzarle a null.
+	public Vector<File> filtraPerData(LocalDateTime dataInizio, LocalDateTime dataFine){
+		if(dataInizio == null) dataInizio = LocalDateTime.of(1800,1,1,1,1);
+		if (dataFine == null) dataFine = LocalDateTime.now().plusYears(1);
+		Vector<File> files = new Vector<>();
+		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, File> entry = it.next();
+			if(entry.getValue().getDataUltimaModifica().isAfter(dataInizio) && entry.getValue().getDataUltimaModifica().isBefore(dataFine)) files.add(entry.getValue());
+		}
+		return files;
 	}
 }
