@@ -1,17 +1,12 @@
 package it.progettoOOP.service;
 
 import it.progettoOOP.model.*;
-import it.progettoOOP.exception.ListaLocaleVuotaException;
-import it.progettoOOP.model.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDate;
+import it.progettoOOP.exception.ChiaviNullException;
+import it.progettoOOP.exception.divZeroException;
+
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalAmount;
 import java.util.*;
 import java.util.Map.Entry;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -28,7 +23,7 @@ public class ServizioFileImpl implements ServizioFile {
 																								// tipo String
 	// Definisco l'iteratore per la lista dei file scaricati
 
-	private Boolean aggiungiFile(File file) {
+	private Boolean aggiungiFile(File file) throws ChiaviNullException {
 		if (fileRepo.containsKey(file.getId())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Questo file è gia presente ..");
 		}
@@ -57,12 +52,8 @@ public class ServizioFileImpl implements ServizioFile {
 		return true;
 	}
 
-	public Collection<File> getFiles() throws ListaLocaleVuotaException { // ottengo la lista dei files
-		if (fileRepo.isEmpty()) {
-			throw new ListaLocaleVuotaException();
-		} else {
-			return fileRepo.values();
-		}
+	public Collection<File> getFiles() { // ottengo la lista dei files
+		return fileRepo.values();
 	}
 
 	// questo metodo esegue una request list_folder ottenendo l'elenco di tutti i
@@ -117,13 +108,13 @@ public class ServizioFileImpl implements ServizioFile {
 																			// {requestJson}[headers]
 		RestTemplate restTemplate = new RestTemplate();
 		obj = new JSONObject(restTemplate.postForObject(url, entity, String.class)); // dal response della request
-																						// definisco l'obj (json)
+		// definisco l'obj (json)
 		nomeFile = obj.getString("name");
 		dimensioneFile = obj.getInt("size");
 		dataUltimaModifica = LocalDateTime.parse(obj.getString("client_modified").split("Z")[0]);
-		autoreFile = obj.getJSONObject("sharing_info").getString("modified_by"); //Contiene l'id dell'utente
+		autoreFile = obj.getJSONObject("sharing_info").getString("modified_by"); // Contiene l'id dell'utente
 
-		//Ricavo il parametro display_name con il metodo get_account
+		// Ricavo il parametro display_name con il metodo get_account
 		url = "https://api.dropboxapi.com/2/users/get_account";
 		jsonString = "{\"account_id\": \"" + autoreFile + "\"}";
 		entity = new HttpEntity<>(jsonString, headers);
@@ -135,7 +126,7 @@ public class ServizioFileImpl implements ServizioFile {
 
 	}
 
-	public Boolean scaricaFile(String id, double[] chiavi) {
+	public void scaricaFile(String id, double[] chiavi) throws ChiaviNullException {
 		File file = getInformazioniFile(id); // prendo le informazioni di un oggetto file per avere poi il nome del file
 												// sotto
 		String jsonString = "{\"path\": \"" + id + "\"}";
@@ -149,9 +140,10 @@ public class ServizioFileImpl implements ServizioFile {
 
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 		ResponseEntity<byte[]> response = restTemplate.build().exchange(url, HttpMethod.GET, entity, byte[].class);
+
 		decriptaFile(chiavi, file, response.getBody());
 
-		return aggiungiFile(file);
+		aggiungiFile(file);
 
 	}
 
@@ -202,9 +194,13 @@ public class ServizioFileImpl implements ServizioFile {
 	// di tipo Testo
 	// presenti nell'hashmap. Definisco un iteratore interno al metodo.
 	//
-	public double mediaNumeroParole() {
+	public double mediaNumeroParole() throws divZeroException {
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
 		int numeroParole = 0;
+		int numeroTxt = numeroTxt();
+		if (numeroTxt == 0) {
+			throw new divZeroException("Non ci sono testi.");
+		}
 		double media;
 		while (it.hasNext()) {
 			Map.Entry<String, File> entry = it.next();
@@ -212,13 +208,17 @@ public class ServizioFileImpl implements ServizioFile {
 				numeroParole += ((Testo) entry.getValue()).conteggioNumeroParole();
 			}
 		}
-		media = (double)numeroParole / numeroTxt();
+		media = (double) numeroParole / numeroTxt;
 		return media;
 	}
 
-	public double mediaNumeroFrasi() {
+	public double mediaNumeroFrasi() throws divZeroException {
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
 		int numeroFrasi = 0;
+		int numeroTxt = numeroTxt();
+		if (numeroTxt == 0) {
+			throw new divZeroException("Non ci sono testi.");
+		}
 		double media;// uso l'iteratore per scorrere la lista dei file scaricati
 		while (it.hasNext()) {
 			Map.Entry<String, File> entry = it.next();
@@ -226,13 +226,18 @@ public class ServizioFileImpl implements ServizioFile {
 				numeroFrasi += ((Testo) entry.getValue()).conteggioNumeroFrasi();
 			}
 		}
-		media = (double)numeroFrasi / numeroTxt();
+		media = (double) numeroFrasi / numeroTxt;
 		return media;
 	}
 
-	public double mediaNumeroCaratteri() {
+	public double mediaNumeroCaratteri() throws divZeroException {
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
 		int numeroCaratteri = 0;
+		int numeroTxt = numeroTxt();
+		if (numeroTxt == 0) {
+			throw new divZeroException("Non ci sono testi.");
+		}
+
 		double media;
 		while (it.hasNext()) {
 			Map.Entry<String, File> entry = it.next();
@@ -240,13 +245,17 @@ public class ServizioFileImpl implements ServizioFile {
 				numeroCaratteri += ((Testo) entry.getValue()).conteggioNumeroCaratteri();
 			}
 		}
-		media = (double)numeroCaratteri / numeroTxt();
+		media = (double) numeroCaratteri / numeroTxt;
 		return media;
 	}
 
-	public double mediaNumeroPixel() {
+	public double mediaNumeroPixel() throws divZeroException {
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
 		int numPixel = 0;
+		int numeroImm = numeroImm();
+		if (numeroImm == 0) {
+			throw new divZeroException("Non ci sono immagini.");
+		}
 		double media;
 		while (it.hasNext()) {
 			Map.Entry<String, File> entry = it.next();
@@ -254,50 +263,60 @@ public class ServizioFileImpl implements ServizioFile {
 				numPixel += ((Immagine) entry.getValue()).getNumPixel();
 			}
 		}
-		media = (double)numPixel / numeroImm();
+		media = (double) numPixel / numeroImm;
 		return media;
 	}
 
-	public double[] mediaDimensioniImmagini() {
+	public double[] mediaDimensioniImmagini() throws divZeroException {
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
 		double numPixelAlt = 0;
 		double numPixelLar = 0;
 		int numeroImm = numeroImm();
+		if (numeroImm == 0) {
+			throw new divZeroException("Non ci sono immagini.");
+		}
 		while (it.hasNext()) {
 			Map.Entry<String, File> entry = it.next();
 			if (entry.getValue().getTipoFile().equals("Immagine")) {
 				numPixelLar += ((Immagine) entry.getValue()).getDimImmagine()[0];
 				numPixelAlt += ((Immagine) entry.getValue()).getDimImmagine()[1];
 			}
+
 		}
 		return new double[] { numPixelLar / numeroImm, numPixelAlt / numeroImm };
 	}
 
-	public HashMap<String, Double> statAutori() {
+	public HashMap<String, Double> statAutori() throws divZeroException {
+		if (fileRepo.size() == 0) {
+			throw new divZeroException("Non ci sono file scaricati.");
+		}
 		HashMap<String, Double> autori = new HashMap<>();
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<String, File> entry = it.next();
 			autori.merge(entry.getValue().getAutore(), 1.0, Double::sum);
 		}
-
-
 		for (Entry<String, Double> entry : autori.entrySet()) {
-			entry.setValue(Math.floor(entry.getValue()*100/fileRepo.size()));
+			entry.setValue(Math.floor(entry.getValue() * 100 / fileRepo.size()));
 		}
 		return autori;
 	}
 
-	//Prende in input due date con le quali filtra i file salvati nell'hasmap. Ritorna il vettore dei file che soddisfano
-	//il filtro. Per omettere dataInizio, o dataFine, bisogna valorizzarle a null.
-	public Vector<File> filtraPerData(LocalDateTime dataInizio, LocalDateTime dataFine){
-		if(dataInizio == null) dataInizio = LocalDateTime.of(1800,1,1,1,1);
-		if (dataFine == null) dataFine = LocalDateTime.now().plusYears(1);
+	// Prende in input due date con le quali filtra i file salvati nell'hasmap.
+	// Ritorna il vettore dei file che soddisfano
+	// il filtro. Per omettere dataInizio, o dataFine, bisogna valorizzarle a null.
+	public Vector<File> filtraPerData(LocalDateTime dataInizio, LocalDateTime dataFine) {
+		if (dataInizio == null)
+			dataInizio = LocalDateTime.of(1800, 1, 1, 1, 1);
+		if (dataFine == null)
+			dataFine = LocalDateTime.now().plusYears(1);
 		Vector<File> files = new Vector<>();
 		Iterator<Entry<String, File>> it = fileRepo.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry<String, File> entry = it.next();
-			if(entry.getValue().getDataUltimaModifica().isAfter(dataInizio) && entry.getValue().getDataUltimaModifica().isBefore(dataFine)) files.add(entry.getValue());
+			if (entry.getValue().getDataUltimaModifica().isAfter(dataInizio)
+					&& entry.getValue().getDataUltimaModifica().isBefore(dataFine))
+				files.add(entry.getValue());
 		}
 		return files;
 	}

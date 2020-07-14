@@ -22,13 +22,12 @@ public class File {
 		this.tipoFile = null;
 	}
 
-
-
 	public File(String nome) {
 		this.nome = nome;
 	}
+
 	public File(String nome, String percorso, String id, int dimensione, String autore,
-				LocalDateTime dataUltimaModifica) {
+			LocalDateTime dataUltimaModifica) {
 		this.nome = nome;
 		this.percorso = percorso;
 		this.id = id;
@@ -38,14 +37,13 @@ public class File {
 		this.tipoFile = tipoFile(nome);
 	}
 
-
-	//questo metodo ritorna una stringa per dire se Ã¨ un file
+	// questo metodo ritorna una stringa per dire se Ã¨ un file
 	// di testo o immagine. Se non Ã¨ nessuna delle due ritorna null
-	public String tipoFile (String nomeFile) {
+	public String tipoFile(String nomeFile) {
 		String estensione = nomeFile.split("\\.")[nomeFile.split("\\.").length - 1];
-		if(estensione.equals("txt")) {
+		if (estensione.equals("txt")) {
 			return "Testo";
-		}else if (estensione.equals("jpeg") || estensione.equals("png") || estensione.equals("jpg")){
+		} else if (estensione.equals("jpeg") || estensione.equals("png") || estensione.equals("jpg")) {
 			return "Immagine";
 		}
 		return "File";
@@ -55,68 +53,53 @@ public class File {
 		return tipoFile;
 	}
 
-
-
 	public void setTipoFile(String tipoFile) {
 		this.tipoFile = tipoFile;
 	}
-
-
 
 	public String getNome() {
 		return nome;
 	}
 
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
 
 	public String getPercorso() {
 		return percorso;
 	}
 
-
 	public void setPercorso(String percorso) {
 		this.percorso = percorso;
 	}
-
 
 	public String getId() {
 		return id;
 	}
 
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
 
 	public int getDimensione() {
 		return dimensione;
 	}
 
-
 	public void setDimensione(int dimensione) {
 		this.dimensione = dimensione;
 	}
-
 
 	public String getAutore() {
 		return autore;
 	}
 
-
 	public void setAutore(String autore) {
 		this.autore = autore;
 	}
 
-
 	public LocalDateTime getDataUltimaModifica() {
 		return dataUltimaModifica;
 	}
-
 
 	public void setDataUltimaModifica(LocalDateTime dataUltimaModifica) {
 		this.dataUltimaModifica = dataUltimaModifica;
@@ -124,14 +107,9 @@ public class File {
 
 	@Override
 	public String toString() {
-		return "File{" +
-				"nome='" + nome + '\'' +
-				", percorso='" + percorso + '\'' +
-				", id='" + id + '\'' +
-				", dimensione=" + dimensione +
-				", autore='" + autore + '\'' +
-				", dataUltimaModifica=" + dataUltimaModifica +
-				'}';
+		return "File{" + "nome='" + nome + '\'' + ", percorso='" + percorso + '\'' + ", id='" + id + '\''
+				+ ", dimensione=" + dimensione + ", autore='" + autore + '\'' + ", dataUltimaModifica="
+				+ dataUltimaModifica + '}';
 	}
 
 }

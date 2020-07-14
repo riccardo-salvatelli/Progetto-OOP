@@ -1,9 +1,10 @@
 package it.progettoOOP.model;
 
+import it.progettoOOP.exception.ChiaviNullException;
+
 public class Credenziali {
 	private String id;
-	private double [] chiavi;
-	
+	private double[] chiavi;
 
 	public String getId() {
 		return id;
@@ -13,7 +14,9 @@ public class Credenziali {
 		this.id = id;
 	}
 
-	public double[] getChiavi() {
+	public double[] getChiavi() throws ChiaviNullException {
+		if (chiavi == null)
+			throw new ChiaviNullException("Chiavi mancanti");
 		return chiavi;
 	}
 
@@ -22,7 +25,6 @@ public class Credenziali {
 	}
 
 	public Credenziali(String id, double[] chiavi) {
-		super();
 		this.id = id;
 		this.chiavi = chiavi;
 	}
