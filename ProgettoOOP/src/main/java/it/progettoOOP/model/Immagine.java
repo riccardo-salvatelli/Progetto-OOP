@@ -2,7 +2,7 @@ package it.progettoOOP.model;
 
 import javax.imageio.ImageIO;
 
-import it.progettoOOP.exception.ChiaviNullException;
+import it.progettoOOP.exception.ChiaviErrateException;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -29,11 +29,11 @@ public class Immagine extends it.progettoOOP.model.File {
 	 * @param dimensione         Dimensione del file indicata in byte
 	 * @param autore             Nome e cognome dell'utente che ha caricato il file
 	 * @param dataUltimaModifica L'ultima data di modifica registrata da DropBox
-	 * @throws ChiaviNullException Viene invocata quando non si riesce ad ottenere la risoluzione dell'immagine,
+	 * @throws ChiaviErrateException Viene invocata quando non si riesce ad ottenere la risoluzione dell'immagine,
 	 * cioè quando l'immagine è corrotta.
 	 */
 	public Immagine(String nome, String percorso, String id, int dimensione, String autore,
-			LocalDateTime dataUltimaModifica) throws ChiaviNullException {
+			LocalDateTime dataUltimaModifica) throws ChiaviErrateException {
 		super(nome, percorso, id, dimensione, autore, dataUltimaModifica);
 		this.dimImmagine = trovaRisoluzione();
 		this.numPixel = this.dimImmagine[0] * this.dimImmagine[1];
@@ -42,14 +42,14 @@ public class Immagine extends it.progettoOOP.model.File {
 	/**
 	 * trovaRisoluzione sfrutta l'immagine salvata per estrapolare la risoluzione della stessa.
 	 * @return <code>int[]</code> il primo valore rappresenta la larghezza e il secondo l'altezza.
-	 * @throws ChiaviNullException Viene invocata quando l'immagine è danneggiata per cui non si riesce a estrapolarle le dimensioni.
+	 * @throws ChiaviErrateException Viene invocata quando l'immagine è danneggiata per cui non si riesce a estrapolarle le dimensioni.
 	 */
-	public int[] trovaRisoluzione() throws ChiaviNullException {
+	public int[] trovaRisoluzione() throws ChiaviErrateException {
 		BufferedImage bimg = null;
 		try {
 			bimg = ImageIO.read(new File(this.getPercorso() + "/" + this.getNome()));
 			if (bimg == null) {
-				throw new ChiaviNullException("Chiavi errate, l'immagine è corrotta");
+				throw new ChiaviErrateException("Chiavi errate, l'immagine è corrotta");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

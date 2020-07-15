@@ -1,9 +1,10 @@
 package it.progettoOOP.model;
 
+import it.progettoOOP.exception.ChiaviErrateException;
 import it.progettoOOP.exception.ChiaviNullException;
 
 /**
- * <b>Credenziali</b> viene unicamente utilizzata in {@link it.progettoOOP.service.ServizioFileImpl#scaricaFile(String, double[])}
+ * <b>Credenziali</b> viene unicamente utilizzata in {@link it.progettoOOP.service.ServizioFileImpl#scaricaFile(Credenziali)}
  * come parametro del metodo
  */
 public class Credenziali {

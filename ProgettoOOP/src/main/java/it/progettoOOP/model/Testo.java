@@ -4,8 +4,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
-import it.progettoOOP.exception.ChiaviNullException;
-import it.progettoOOP.exception.NumCaratteriException;
+import it.progettoOOP.exception.ChiaviErrateException;
+
 
 /**
  * <b>Testo</b> Introduce alcuni parametri caratteristici dei file di testo (.txt).
@@ -32,12 +32,12 @@ public class Testo extends File {
      * @param dimensione         Dimensione del file indicata in byte
      * @param autore             Nome e cognome dell'utente che ha caricato il file
      * @param dataUltimaModifica L'ultima data di modifica registrata da DropBox
-     * @throws ChiaviNullException Viene invocata quando {@link Testo#isTesto(String, String)} risulta falso.
+     * @throws ChiaviErrateException Viene invocata quando {@link Testo#isTesto(String, String)} risulta falso.
      */
     public Testo(String nome, String percorso, String id, int dimensione, String autore,
-                 LocalDateTime dataUltimaModifica) throws ChiaviNullException {
+                 LocalDateTime dataUltimaModifica) throws ChiaviErrateException {
         super(nome, percorso, id, dimensione, autore, dataUltimaModifica);
-        if (!isTesto(percorso, nome)) throw new ChiaviNullException("Chiavi errate, file di testo corrotto");
+        if (!isTesto(percorso, nome)) throw new ChiaviErrateException("Chiavi errate, file di testo corrotto");
         this.numFrasi = this.conteggioNumeroFrasi();
         this.numParole = this.conteggioNumeroParole();
         this.numCaratteri = this.conteggioNumeroCaratteri();
@@ -47,11 +47,9 @@ public class Testo extends File {
         this.numFrasi = numFrasi;
     }
 
-    public int getNumCaratteri() throws NumCaratteriException {
-        if (numCaratteri >= 0)
+    public int getNumCaratteri() {
             return numCaratteri;
-        else
-            throw new NumCaratteriException();
+        
     }
 
     public void setNumCaratteri(int numCaratteri) {
