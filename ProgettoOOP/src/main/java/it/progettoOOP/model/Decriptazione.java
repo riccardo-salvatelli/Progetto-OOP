@@ -1,19 +1,41 @@
 package it.progettoOOP.model;
 
 import java.io.*;
-import java.io.File;
 
+/**<b>Decriptazione</b> definisce i due metodi necessari per crittografare file sfruttando il sistema caotico di Van der Pol.
+ */
 public class Decriptazione {
 
+	/**
+	 * contiene al suo interno il valore relativo alla prima e alla seconda chiave,
+	 * necessarie per decriptare il file
+	 */
 	private double[] chiave;
+
+	/**
+	 * Costante necessaria per calcolare la seuqenza pseudorandomica
+	 */
+	static double rho = 0.6;
+	/**
+	 * Costante necessaria per calcolare la seuqenza pseudorandomica
+	 */
+	static double w = 5.9;
+	/**
+	 * Costante necessaria per calcolare la seuqenza pseudorandomica
+	 */
+	static double k = 19.5;
 
 	public Decriptazione(double[] chiave) {
 		this.chiave = chiave;
 	}
 
-	//Questa funzione prende in input un file (file) e un array di valori interi (sequenza). legge il file byte per
-	// byte e per ognuno di essi ne esegue lo xor rispetto al corrispondente i-esimo valore della sequenza. Salva il
-	// risultato di questa operazione in un BufferedOutputStream che restituisce al termine del metodo.
+	/**
+	 *  Prende in input un l'array di byte criptato e un array di valori interi. Esegue lo xor tra tutti i byte e
+	 *  gli elementi della sequenza, ottenendo così i byte decriptati. Scrive su file il risultato di questa operazione.
+	 * @param by Array di byte che devono essere decriptati
+	 * @param sequenza Array di valori interi (che vengono ricavati da {@link Decriptazione#calcoloSequenza(int)}
+	 * @param nomeFile Il nome del file che viene salvato in locale, all'interno del quale vengono scritti i byte decriptati
+	 */
 	public void chaosXOR(byte [] by, int[] sequenza, String nomeFile){
 		BufferedOutputStream bufferedOutputStream = null;
 		try {
@@ -35,10 +57,11 @@ public class Decriptazione {
 		}
 	}
 
-	static double rho = 0.6;
-	static double w = 5.9;
-	static double k = 19.5;
-
+	/**
+	 * Calcola la sequenza pseudorandomica utilizzata per decriptare (per effettuare lo XOR con l'array di bytes).
+	 * @param dimensione La dimensione del file espressa in byte
+	 * @return <code>int[]</code> - sequenza pseudorandomica sotto forma di array di interi
+	 */
 	public int[] calcoloSequenza(int dimensione) {
 
 
@@ -72,16 +95,16 @@ public class Decriptazione {
 		boolean controllo2 = true;
 
 		for (int i = 0; i < n; i++) {
-			k1x = Decriptazione.f1(t[i], x[i], y[i]);
+			k1x = y[i];
 			k1y = Decriptazione.f2(t[i], x[i], y[i]);
 
-			k2x = Decriptazione.f1(t[i] + 0.5 * h, x[i] + 0.5 * h * k1x, y[i] + 0.5 * h * k1y);
+			k2x = y[i] + 0.5 * h * k1y;
 			k2y = Decriptazione.f2(t[i] + 0.5 * h, x[i] + 0.5 * h * k1x, y[i] + 0.5 * h * k1y);
 
-			k3x = Decriptazione.f1(t[i] + 0.5 * h, x[i] + 0.5 * h * k2x, y[i] + 0.5 * h * k2y);
+			k3x = y[i] + 0.5 * h * k2y;
 			k3y = Decriptazione.f2(t[i] + 0.5 * h, x[i] + 0.5 * h * k2x, y[i] + 0.5 * h * k2y);
 
-			k4x = Decriptazione.f1(t[i] + h, x[i] + k3x * h, y[i] + k3y * h);
+			k4x = y[i] + k3y * h;
 			k4y = Decriptazione.f2(t[i] + h, x[i] + k3x * h, y[i] + k3y * h);
 
 			x[i + 1] = x[i] + (1.0 / 6.0) * (k1x + 2 * k2x + 2 * k3x + k4x) * h;
@@ -113,16 +136,16 @@ public class Decriptazione {
 		}
 		for (int i = 0; i < dimensione - 1; i++) {
 
-			k1x = Decriptazione.f1(t[i], x[i], y[i]);
+			k1x = y[i];
 			k1y = Decriptazione.f2(t[i], x[i], y[i]);
 
-			k2x = Decriptazione.f1(t[i] + 0.5 * h, x[i] + 0.5 * h * k1x, y[i] + 0.5 * h * k1y);
+			k2x = y[i] + 0.5 * h * k1y;
 			k2y = Decriptazione.f2(t[i] + 0.5 * h, x[i] + 0.5 * h * k1x, y[i] + 0.5 * h * k1y);
 
-			k3x = Decriptazione.f1(t[i] + 0.5 * h, x[i] + 0.5 * h * k2x, y[i] + 0.5 * h * k2y);
+			k3x = y[i] + 0.5 * h * k2y;
 			k3y = Decriptazione.f2(t[i] + 0.5 * h, x[i] + 0.5 * h * k2x, y[i] + 0.5 * h * k2y);
 
-			k4x = Decriptazione.f1(t[i] + h, x[i] + k3x * h, y[i] + k3y * h);
+			k4x = y[i] + k3y * h;
 			k4y = Decriptazione.f2(t[i] + h, x[i] + k3x * h, y[i] + k3y * h);
 
 			x[i + 1] = x[i] + (1.0 / 6.0) * (k1x + 2 * k2x + 2 * k3x + k4x) * h;
@@ -136,10 +159,13 @@ public class Decriptazione {
 		return stheta;
 	}
 
-	static public double f1(double t, double x, double y) {
-		return y;
-	}
-
+	/**
+	 * f2 viene usata nel metodo di Runge-Kutta, per calcolare iterativamente gli stati del sistema di Van der Pol
+	 * @param t rappresenta il tempo
+	 * @param x rappresenta lo stato x del sistema all'istante i-esimo
+	 * @param y rappresenta lo stato y del sistema all'istante i-esimo
+	 * @return <code>double</code> il risultato dell'equazione
+	 */
 	static public double f2(double t, double x, double y) {
 		return -k * Math.sin(w * t) * x + 2 * rho * y - 2 * rho * (Math.pow(x, 2)) * y;
 	}
