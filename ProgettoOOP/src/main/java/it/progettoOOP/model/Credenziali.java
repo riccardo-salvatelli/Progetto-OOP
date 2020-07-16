@@ -32,8 +32,7 @@ public class Credenziali {
      * @throws ChiaviNullException Lancia quest'eccezione quando <code>chiavi == null</code>
      */
     public double[] getChiavi() throws ChiaviNullException {
-        if (chiavi == null)
-            throw new ChiaviNullException("Chiavi mancanti");
+        if (chiavi == null) throw new ChiaviNullException("Chiavi mancanti");
         return chiavi;
     }
 

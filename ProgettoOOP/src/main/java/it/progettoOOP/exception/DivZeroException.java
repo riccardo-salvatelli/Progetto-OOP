@@ -1,9 +1,9 @@
 package it.progettoOOP.exception;
 
-public class divZeroException extends Exception {
+public class DivZeroException extends Exception {
 	String msg;
 
-	public divZeroException(String msg) {
+	public DivZeroException(String msg) {
 		super();
 		this.msg = msg;
 	}
