@@ -49,6 +49,8 @@ public class Immagine extends it.progettoOOP.model.File {
 		try {
 			bimg = ImageIO.read(new File(this.getPercorso() + "/" + this.getNome()));
 			if (bimg == null) {
+				java.io.File file = new java.io.File(getPercorso() + "/" + getNome());
+	        	file.delete();
 				throw new ChiaviErrateException("Chiavi errate, l'immagine è corrotta");
 			}
 		} catch (IOException e) {

@@ -37,7 +37,10 @@ public class Testo extends File {
     public Testo(String nome, String percorso, String id, int dimensione, String autore,
                  LocalDateTime dataUltimaModifica) throws ChiaviErrateException {
         super(nome, percorso, id, dimensione, autore, dataUltimaModifica);
-        if (!isTesto(percorso, nome)) throw new ChiaviErrateException("Chiavi errate, file di testo corrotto");
+        if (!isTesto(percorso, nome)) {
+        	java.io.File file = new java.io.File(percorso + "/" + nome);
+        	file.delete();
+        	throw new ChiaviErrateException("Chiavi errate, file di testo corrotto");}
         this.numFrasi = this.conteggioNumeroFrasi();
         this.numParole = this.conteggioNumeroParole();
         this.numCaratteri = this.conteggioNumeroCaratteri();
