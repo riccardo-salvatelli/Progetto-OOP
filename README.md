@@ -90,6 +90,7 @@ Una volta scaricati i primi file è possibile effettuare anche i seguenti metodi
 - ` GET /mediaDimImm` Restituisce la media delle dimensioni delle immagini (lar x alt).
 - ` GET /statAutori` Restituisce in percentuale quanti file ha caricato.
 - ` POST /filtraData` Restituisce i file scaricati in un'arco temportale specificato nel body della richiesta.
+- ` GET /cancellaFile` Restituisce l'esito dell'operazione.
 
 Esempio di JSON per il body:
 ```
