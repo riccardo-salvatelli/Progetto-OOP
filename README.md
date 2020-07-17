@@ -109,10 +109,21 @@ Il codice java è interamente documentato in [Javadoc](ProgettoOOP/doc/index.htm
 ## Diagrammi UML
 ![alt text](https://raw.githubusercontent.com/riccardo-salvatelli/Progetto-OOP/master/UML/ClassDiagram.png)
 *Diagramma delle classi*
+***
+
+
+
 ![alt text](https://raw.githubusercontent.com/riccardo-salvatelli/Progetto-OOP/master/UML/Diagramma_dei_casi_d'uso.jpg)
 *Diagramma dei casi d'uso*
+***
+
+
+
 ![alt_text](https://raw.githubusercontent.com/riccardo-salvatelli/Progetto-OOP/master/UML/Diagramma%20delle%20seuqenze.png)
 *Diagramma delle seuqenze*
+***
+
+
 
 <a name="strutt"></a>
 ## Struttura progetto
