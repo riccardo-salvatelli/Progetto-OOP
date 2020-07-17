@@ -128,7 +128,24 @@ public class DropboxDecrypterController {
             return new ResponseEntity<>(e.getMsg(), HttpStatus.OK);
         }
     }
-
+    
+    
+    /**
+     * @return <code>ResponseEntity&lt;Object&gt;</code> stampa il risultato di
+     * {@link it.progettoOOP.service.ServizioFileImpl#mediaNumeroCaratteri()}
+     */
+    @GetMapping("/mediaCaratteri")
+    public ResponseEntity<Object> getMediaCaratteri(){
+        try {
+            return new ResponseEntity<>("La media di frasi trovate nei testi è " + servizioFile.mediaNumeroCaratteri(),
+                    HttpStatus.OK);
+        } catch (DivZeroException e) {
+            return new ResponseEntity<>(e.getMsg(), HttpStatus.OK);
+        }
+    }
+    
+    
+    
     /**
      * @return <code>ResponseEntity&lt;Object&gt;</code> stampa il risultato di
      * {@link it.progettoOOP.service.ServizioFileImpl#mediaNumeroPixel()}

@@ -70,22 +70,6 @@ public class ServizioFileImpl implements ServizioFile {
         return file.delete() && fileRepo.remove(id) != null;
     }
 
-    /**
-     * Aggiorna il file corrispondente all'id , andandolo a sovrascrivere.
-     *
-     * @param id   è l'id del file dropbox.
-     * @param file è il file che viene aggiornato.
-     * @return <code>boolean</code> ritorna <code>true</code> se il file è stato
-     * aggiornato. ritorna <code>false</code> se il file non è presente
-     * nell'hashmap.
-     */
-    public boolean aggiornaFile(String id, File file) {
-        if (!cancellaFile(id))
-            return false; // vede se il file è stato cancellato; se si va avanti e aggiorna il file
-        file.setId(id); // se non lo ha cancellato termina
-        fileRepo.put(id, file);
-        return true;
-    }
 
     public Collection<File> getFiles() { // ottengo la lista dei files
         return fileRepo.values();
