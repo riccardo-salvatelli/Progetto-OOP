@@ -8,7 +8,8 @@
 * [Installazione](#install)
 * [Configurazione](#config)
 * [Statistiche](#stats)
-* [Metodi](#metod)
+* [Endpoints](#metod)
+* [Esempio di utilizzo](#edu)
 * [Struttura progetto](#strutt)
 * [Documentazione](#doc)
 * [Diagrammi UML](#uml)
@@ -24,12 +25,13 @@ Un'ulteriore caratteristica dell'applicazione è la possibilità di effettuare s
 
 <a name="install"></a>
 ## Installazione
-Dropbox Decrypter è installabile semplicemente eseguendo:
-```git clone https://github.com/riccardo-salvatelli/Progetto-OOP```
-
+Dropbox Decrypter è installabile semplicemente eseguendo:  
+```
+git clone https://github.com/riccardo-salvatelli/Progetto-OOP  
+```
 <a name="config"></a>
 ## Configurazione
-Per configurare Dropbox Decrypter è necessario modificare la variabile ```token``` all'interno di [ServizioFileImpl.java](ProgettoOOP/src/main/java/it/progettoOOP/service/ServizioFileImpl.java). Una volta fatto ciò basta avviare il web-server eseguendo [DropboxDecrypterApplication.java](ProgettoOOP/src/main/java/it/progettoOOP/DropboxDecrypterApplication.java)
+Per configurare Dropbox Decrypter è necessario modificare la variabile ```token``` (ottenibile alla pagina [app console](https://www.dropbox.com/developers/apps) di Dropbox) all'interno di [ServizioFileImpl.java](ProgettoOOP/src/main/java/it/progettoOOP/service/ServizioFileImpl.java). Una volta fatto ciò basta avviare il web-server eseguendo [DropboxDecrypterApplication.java](ProgettoOOP/src/main/java/it/progettoOOP/DropboxDecrypterApplication.java).
 
 <a name="stats"></a>
 ## Statistiche
@@ -60,14 +62,14 @@ Le statistiche comprendono:
   * Data ultima modifica
 
 <a name="metod"></a>
-## Metodi
+## Endpoints
 Attraverso richieste HTTP è possibile interagire con il web-server locale specificando i corretti endpoint qui sotto elencati.
 L'indirizzo associato al web-server è
 ```
 localhost:8080/
 ```
 Gli endpoint definiti sono:
-- `GET /getListaFIle`
+- `GET /getListaFile`
 Restituisce la lista di file contenuta nella cartella Dropbox
 - `POST /scarica`
 Permette di scaricare in locale il file desiderato passando nel body della richiesta, in formato JSON, un oggetto ```Credenziali``` per decriptare il file
@@ -89,8 +91,8 @@ Una volta scaricati i primi file è possibile effettuare anche i seguenti metodi
 - ` GET /mediaPixel` Restituisce la media di pixel totali delle immagini.
 - ` GET /mediaDimImm` Restituisce la media delle dimensioni delle immagini (lar x alt).
 - ` GET /statAutori` Restituisce in percentuale quanti file ha caricato.
-- ` POST /filtraData` Restituisce i file scaricati in un'arco temportale specificato nel body della richiesta.
 - ` GET /cancellaFile` Restituisce l'esito dell'operazione.
+- ` POST /filtraData` Restituisce i file scaricati in un'arco temportale specificato nel body della richiesta.
 
 Esempio di JSON per il body:
 ```
@@ -102,9 +104,29 @@ Esempio di JSON per il body:
     }
 }
 ```
+<a name="edu"></a>
+## Esempio di utilizzo
+La prima richiesta da effettuare è GET  
+```
+http://localhost:8080/getListaFile  
+```  
+per conoscere la lista dei file e i relativi id presenti in Dropbox. Da questa richiesta è possibile reperire l'id del file desiderato per poi usarlo come parametro nel body della richiesta POST  
+```
+http://localhost:8080/scarica
+```  
+con le relative chiavi. Si ottiene così il file decriptato salvato in locale. Ripetendo questa procedura fino ad ottenere un numero valido di file, con la richiesta GET  
+```
+http://localhost:8080/listaLocale
+```  
+vengono restituiti tutti i file scaricati con le relative informazioni. A questo punto si possono consultare le varie statistiche utilizzando le richieste elencate in [Endpoints](#metod) ed infine, se si desidera, è possibile cancellare file utilizzando la richiesta GET  
+```
+http://localhost:8080/cancellaFile
+```  
+indicando l'id come parametro GET.
+
 <a name="doc"></a>
 ## Documentazione
-Il codice java è interamente documentato in [Javadoc](ProgettoOOP/doc/index.html)
+Il codice java è interamente documentato in [Javadoc](ProgettoOOP/doc/index.html).
 
 <a name="uml"></a>
 ## Diagrammi UML
@@ -121,7 +143,7 @@ Il codice java è interamente documentato in [Javadoc](ProgettoOOP/doc/index.htm
 
 
 ![alt_text](https://raw.githubusercontent.com/riccardo-salvatelli/Progetto-OOP/master/UML/Diagramma%20delle%20seuqenze.png)
-*Diagramma delle seuqenze*
+*Diagramma delle seuqenze. [Diagramma delle sequenze di scaricaFile()](https://raw.githubusercontent.com/riccardo-salvatelli/Progetto-OOP/master/UML/scaricaFile.png)*
 ***
 
 
@@ -329,9 +351,11 @@ Il codice java è interamente documentato in [Javadoc](ProgettoOOP/doc/index.htm
 ├── README.md
 └── UML
     ├── ClassDiagram.png
-    └── ProgettoOOP_Model Use Case Diagram.jpg
+    ├── Diagramma_dei_casi_d'uso.jpg
+    ├── Diagramma delle seuqenze.png
+    └── scaricaFile.png
 
-64 directories, 136 files
+64 directories, 138 files
 ```
 
 ### Autori
