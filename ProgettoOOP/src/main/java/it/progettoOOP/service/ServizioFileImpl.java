@@ -246,7 +246,7 @@ public class ServizioFileImpl implements ServizioFile {
         while (it.hasNext()) {
             Map.Entry<String, File> entry = it.next();
             if (entry.getValue().getTipoFile().equals("Testo")) {
-                numeroParole += ((Testo) entry.getValue()).conteggioNumeroParole();
+                numeroParole += ((Testo) entry.getValue()).getNumParole();
             }
         }
         media = (double) numeroParole / numeroTxt;
@@ -272,7 +272,7 @@ public class ServizioFileImpl implements ServizioFile {
         while (it.hasNext()) {
             Map.Entry<String, File> entry = it.next();
             if (entry.getValue().getTipoFile().equals("Testo")) {
-                numeroFrasi += ((Testo) entry.getValue()).conteggioNumeroFrasi();
+                numeroFrasi += ((Testo) entry.getValue()).getNumFrasi();
             }
         }
         media = (double) numeroFrasi / numeroTxt;
@@ -299,7 +299,7 @@ public class ServizioFileImpl implements ServizioFile {
         while (it.hasNext()) {
             Map.Entry<String, File> entry = it.next();
             if (entry.getValue().getTipoFile().equals("Testo")) {
-                numeroCaratteri += ((Testo) entry.getValue()).conteggioNumeroCaratteri();
+                numeroCaratteri += ((Testo) entry.getValue()).getNumCaratteri();
             }
         }
         media = (double) numeroCaratteri / numeroTxt;
